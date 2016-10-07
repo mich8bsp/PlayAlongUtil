@@ -2,13 +2,9 @@ package com.github.mich8bsp;
 
 import javafx.application.Platform;
 import javafx.scene.control.*;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.scene.text.Font;
@@ -19,9 +15,11 @@ import java.util.List;
 
 public class MediaControl extends BorderPane {
 
-    private final SongStructure songStructure;
+    private final SongStructure tabStructure;
+    private SongStructure lyricsStructure;
     private MediaPlayer mp;
     private TextArea tabTextField;
+    private TextArea lyricsTextField;
     private Duration duration;
     private Slider timeSlider;
     private Label playTime;
@@ -30,16 +28,32 @@ public class MediaControl extends BorderPane {
 
     private List<SongEvents> songEventObservers = new LinkedList<>();
 
-    public MediaControl(MediaPlayer mp, SongStructure songStructure) {
+    public MediaControl(MediaPlayer mp, SongStructure tabStructure, SongStructure lyricsStructure) {
         this.mp = mp;
-        this.songStructure = songStructure;
-        setStyle("-fx-background-color: #bfc2c7;");
+        this.tabStructure = tabStructure;
+        this.lyricsStructure = lyricsStructure;
+
+        buildView();
+        buildPlaybackControls();
+        buildTimeControls();
+        buildVolumeControls();
+        setBottom(mediaBar);
+    }
+
+    private void buildView() {
+        BorderPane mvPane = new BorderPane();
+
         tabTextField = new TextArea();
-        tabTextField.setText(songStructure.getCurrentPart(0));
+        tabTextField.setText(tabStructure.getCurrentPart(0));
         tabTextField.setWrapText(true);
-        Pane mvPane = new Pane();
-        mvPane.getChildren().add(tabTextField);
-        mvPane.setStyle("-fx-background-color: black;");
+        mvPane.setLeft(tabTextField);
+
+        if(lyricsStructure!=null) {
+            lyricsTextField = new TextArea();
+            lyricsTextField.setText(lyricsStructure.getCurrentPart(0));
+            lyricsTextField.setWrapText(true);
+            mvPane.setRight(lyricsTextField);
+        }
         setCenter(mvPane);
 
         mediaBar = new HBox();
@@ -47,6 +61,9 @@ public class MediaControl extends BorderPane {
         mediaBar.setPadding(new Insets(5, 10, 5, 10));
         BorderPane.setAlignment(mediaBar, Pos.CENTER);
 
+    }
+
+    private void buildPlaybackControls(){
         final Button playButton = new Button(">");
 
         playButton.setOnAction(e -> {
@@ -64,13 +81,9 @@ public class MediaControl extends BorderPane {
         });
         mp.currentTimeProperty().addListener(ov -> updateValues());
 
-        mp.setOnPlaying(() -> {
-            playButton.setText("||");
-        });
+        mp.setOnPlaying(() -> playButton.setText("||"));
 
-        mp.setOnPaused(() -> {
-            playButton.setText(">");
-        });
+        mp.setOnPaused(() -> playButton.setText(">"));
 
         mp.setOnReady(() -> {
             duration = mp.getMedia().getDuration();
@@ -89,6 +102,9 @@ public class MediaControl extends BorderPane {
         Label spacer = new Label("   ");
         mediaBar.getChildren().add(spacer);
 
+    }
+
+    private void buildTimeControls(){
         // Add Time label
         Label timeLabel = new Label("Time: ");
         mediaBar.getChildren().add(timeLabel);
@@ -111,7 +127,9 @@ public class MediaControl extends BorderPane {
         playTime.setPrefWidth(130);
         playTime.setMinWidth(50);
         mediaBar.getChildren().add(playTime);
+    }
 
+    private void buildVolumeControls(){
         // Add the volume label
         Label volumeLabel = new Label("Vol: ");
         mediaBar.getChildren().add(volumeLabel);
@@ -127,8 +145,6 @@ public class MediaControl extends BorderPane {
             }
         });
         mediaBar.getChildren().add(volumeSlider);
-
-        setBottom(mediaBar);
     }
 
     private void updateValues() {
@@ -142,7 +158,10 @@ public class MediaControl extends BorderPane {
                         && !timeSlider.isValueChanging()) {
                     timeSlider.setValue(currentTime.divide(duration.toMillis()).toMillis()
                             * 100.0);
-                    tabTextField.setText(songStructure.getCurrentPart(currentTime.toSeconds()));
+                    tabTextField.setText(tabStructure.getCurrentPart(currentTime.toSeconds()));
+                    if(lyricsStructure!=null) {
+                        lyricsTextField.setText(lyricsStructure.getCurrentPart(currentTime.toSeconds()));
+                    }
                 }
                 if (!volumeSlider.isValueChanging()) {
                     volumeSlider.setValue((int) Math.round(mp.getVolume()
@@ -193,11 +212,6 @@ public class MediaControl extends BorderPane {
 
     public void addEventObserver(SongEvents observer) {
         songEventObservers.add(observer);
-    }
-
-    public void setTabAreaSize(double width, double height){
-        tabTextField.setPrefSize(width, height - mediaBar.getHeight());
-        tabTextField.setFont(Font.font(12));
     }
 
     private void skipToNext(){

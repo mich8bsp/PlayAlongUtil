@@ -14,23 +14,41 @@ public class SongBundle {
     private MediaControl mediaControl;
     private Media songMedia;
     private MediaPlayer mediaPlayer;
-    private SongStructure songStructure;
+    private SongStructure tabsStructure;
+    private SongStructure lyricsStructure;
     private Path audioFile;
     private Path tabFile;
+    private Path lyricsFile;
+
+
 
     public SongBundle(Path tabFile) {
-        this.tabFile = tabFile;
         try {
-            this.songStructure = new SongStructure(tabFile);
+            this.tabFile = tabFile;
+            this.tabsStructure = new SongStructure(tabFile);
+            this.lyricsFile = null;
+            this.lyricsStructure = null;
+            try{
+                lyricsFile = getLyricsFileByTab(tabFile);
+                lyricsStructure = new SongStructure(lyricsFile);
+            }catch (Exception e){
+                System.out.println("Couldn't find lyrics file for " + tabFile.getFileName().toString());
+            }
+
             this.audioFile = getAudioFileByTab(tabFile);
             String songURL ="file:///" + audioFile.toString().replace("\\", "/").replaceAll(" ", "%20");
             songMedia = new Media(songURL);
             mediaPlayer = new MediaPlayer(songMedia);
             mediaPlayer.setAutoPlay(false);
-            mediaControl = new MediaControl(mediaPlayer, songStructure);
+            mediaControl = new MediaControl(mediaPlayer, tabsStructure, lyricsStructure);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private Path getLyricsFileByTab(Path tabFile) {
+        String songName = tabFile.getFileName().toString().replaceAll(".tabs", "");
+        return tabFile.resolveSibling(songName + ".lyrics");
     }
 
     private Path getAudioFileByTab(Path tabFile) {
@@ -47,8 +65,8 @@ public class SongBundle {
         return songMedia;
     }
 
-    public SongStructure getSongStructure() {
-        return songStructure;
+    public SongStructure getTabsStructure() {
+        return tabsStructure;
     }
 
     public Path getTabFile() {
@@ -61,5 +79,9 @@ public class SongBundle {
 
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
+    }
+
+    public SongStructure getLyricsStructure() {
+        return lyricsStructure;
     }
 }

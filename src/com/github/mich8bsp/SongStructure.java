@@ -15,9 +15,9 @@ public class SongStructure {
     private Map<Double, String> songStructure = new HashMap<>();
     private Map<String, SongPart> songParts = new HashMap<>();
 
-    public SongStructure(Path tab) throws IOException {
-        List<String> tabLines = Files.readAllLines(tab);
-        buildSong(tabLines);
+    public SongStructure(Path file) throws IOException {
+        List<String> allLines = Files.readAllLines(file);
+        buildSong(allLines);
     }
 
     private void buildSong(List<String> tab) {
