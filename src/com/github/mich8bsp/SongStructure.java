@@ -24,9 +24,8 @@ public class SongStructure {
         SongPart currentPartToFill = null;
         for(String line : tab){
             if(line.contains("-")){
-                String[] index = line.split("-");
-                String songPart = index[0];
-                String time = index[1];
+                String songPart = line.substring(0, line.lastIndexOf("-"));
+                String time = line.substring(line.lastIndexOf("-")+1, line.length());
                 if(songPart.matches("\\[.*\\]")){
                     if(time.matches("[0-9]+:[0-9]+")){
                         songPart = songPart.replaceAll("\\[", "");
@@ -34,6 +33,8 @@ public class SongStructure {
                         if(songParts.get(songPart) ==null){
                             currentPartToFill = new SongPart();
                             songParts.put(songPart, currentPartToFill);
+                        }else{
+                            currentPartToFill=null;
                         }
                         int minutes = Integer.parseInt(time.split(":")[0]);
                         int seconds = Integer.parseInt(time.split(":")[1]);

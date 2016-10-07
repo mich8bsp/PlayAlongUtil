@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 import java.util.LinkedList;
@@ -34,8 +35,8 @@ public class MediaControl extends BorderPane {
         this.songStructure = songStructure;
         setStyle("-fx-background-color: #bfc2c7;");
         tabTextField = new TextArea();
-        tabTextField.setWrapText(true);
         tabTextField.setText(songStructure.getCurrentPart(0));
+        tabTextField.setWrapText(true);
         Pane mvPane = new Pane();
         mvPane.getChildren().add(tabTextField);
         mvPane.setStyle("-fx-background-color: black;");
@@ -192,6 +193,11 @@ public class MediaControl extends BorderPane {
 
     public void addEventObserver(SongEvents observer) {
         songEventObservers.add(observer);
+    }
+
+    public void setTabAreaSize(double width, double height){
+        tabTextField.setPrefSize(width, height - mediaBar.getHeight());
+        tabTextField.setFont(Font.font(12));
     }
 
     private void skipToNext(){
