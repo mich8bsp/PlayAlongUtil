@@ -35,6 +35,7 @@ public class SongBundle {
 
     private Path getAudioFileByTab(Path tabFile) {
         String songName = tabFile.getFileName().toString().replaceAll(".tabs", "");
+        //currently supports only mp3s, add other extensions here
         return tabFile.resolveSibling(songName + ".mp3");
     }
 

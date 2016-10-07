@@ -20,7 +20,7 @@ public class TabMediaPlayer extends Application implements SongEvents{
     @Override
     public void start(Stage primaryStage) {
 
-        primaryStage.setTitle("Tab Util Player");
+        primaryStage.setTitle("Play Along Util");
 
         final List<String> params = getParameters().getRaw();
         final File dir = (params.size() > 0)
@@ -35,23 +35,14 @@ public class TabMediaPlayer extends Application implements SongEvents{
         songManager.init(dir);
 
         Group root = new Group();
-        scene = new Scene(root, 540, 241);
+        scene = new Scene(root);
         onSongChange();
-
         primaryStage.setScene(scene);
-        primaryStage.sizeToScene();
+        primaryStage.setMaximized(true);
         primaryStage.show();
 
     }
 
-    /**
-     * The main() method is ignored in correctly deployed JavaFX application.
-     * main() serves only as fallback in case the application can not be
-     * launched through deployment artifacts, e.g., in IDEs with limited FX
-     * support. NetBeans ignores main().
-     *
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         launch(args);
     }
