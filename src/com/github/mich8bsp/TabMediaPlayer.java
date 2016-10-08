@@ -53,6 +53,8 @@ public class TabMediaPlayer extends Application implements SongEvents{
         MediaControl nextSongControl = nextSong.getMediaControl();
         nextSongControl.addEventObserver(this);
         scene.setRoot(nextSongControl);
+        nextSong.getMediaPlayer().currentTimeProperty().addListener(ov -> nextSongControl.updateValues());
+
         nextSong.getMediaPlayer().play();
     }
 }

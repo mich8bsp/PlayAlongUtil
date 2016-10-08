@@ -79,7 +79,6 @@ public class MediaControl extends BorderPane {
                 mp.pause();
             }
         });
-        mp.currentTimeProperty().addListener(ov -> updateValues());
 
         mp.setOnPlaying(() -> playButton.setText("||"));
 
@@ -147,7 +146,7 @@ public class MediaControl extends BorderPane {
         mediaBar.getChildren().add(volumeSlider);
     }
 
-    private void updateValues() {
+    protected void updateValues() {
         if (playTime != null && timeSlider != null && volumeSlider != null) {
             Platform.runLater(() -> {
                 Duration currentTime = mp.getCurrentTime();
@@ -172,7 +171,7 @@ public class MediaControl extends BorderPane {
     }
 
     private static String formatTime(Duration elapsed, Duration duration) {
-        int intElapsed = (int) Math.floor(elapsed.toSeconds());
+        int intElapsed = (int) elapsed.toSeconds();
         int elapsedHours = intElapsed / (60 * 60);
         if (elapsedHours > 0) {
             intElapsed -= elapsedHours * 60 * 60;
@@ -182,7 +181,7 @@ public class MediaControl extends BorderPane {
                 - elapsedMinutes * 60;
 
         if (duration.greaterThan(Duration.ZERO)) {
-            int intDuration = (int) Math.floor(duration.toSeconds());
+            int intDuration = (int) duration.toSeconds();
             int durationHours = intDuration / (60 * 60);
             if (durationHours > 0) {
                 intDuration -= durationHours * 60 * 60;
