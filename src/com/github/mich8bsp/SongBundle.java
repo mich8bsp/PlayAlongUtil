@@ -19,40 +19,44 @@ public class SongBundle {
     private Path audioFile;
     private Path tabFile;
     private Path lyricsFile;
+    private String songName;
 
 
 
-    public SongBundle(Path tabFile) {
+    public SongBundle(Path tabFile, SongManager songManager) {
         try {
             this.tabFile = tabFile;
+            this.songName = resolveSongName(tabFile);
             this.tabsStructure = new SongStructure(tabFile);
             this.lyricsFile = null;
             this.lyricsStructure = null;
             try{
-                lyricsFile = getLyricsFileByTab(tabFile);
+                lyricsFile = resolveLyricsFile();
                 lyricsStructure = new SongStructure(lyricsFile);
             }catch (Exception e){
                 System.out.println("Couldn't find lyrics file for " + tabFile.getFileName().toString());
             }
 
-            this.audioFile = getAudioFileByTab(tabFile);
+            this.audioFile = resolveAudioFile();
             String songURL ="file:///" + audioFile.toString().replace("\\", "/").replaceAll(" ", "%20");
             songMedia = new Media(songURL);
             mediaPlayer = new MediaPlayer(songMedia);
             mediaPlayer.setAutoPlay(false);
-            mediaControl = new MediaControl(mediaPlayer, tabsStructure, lyricsStructure);
+            mediaControl = new MediaControl(mediaPlayer, tabsStructure, lyricsStructure, songManager);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private Path getLyricsFileByTab(Path tabFile) {
-        String songName = tabFile.getFileName().toString().replaceAll(".tabs", "");
+    private Path resolveLyricsFile() {
         return tabFile.resolveSibling(songName + ".lyrics");
     }
 
-    private Path getAudioFileByTab(Path tabFile) {
-        String songName = tabFile.getFileName().toString().replaceAll(".tabs", "");
+    protected static String resolveSongName(Path tabFile){
+        return tabFile.getFileName().toString().replaceAll(".tabs", "");
+    }
+
+    private Path resolveAudioFile() {
         //currently supports only mp3s, add other extensions here
         return tabFile.resolveSibling(songName + ".mp3");
     }
@@ -83,5 +87,9 @@ public class SongBundle {
 
     public SongStructure getLyricsStructure() {
         return lyricsStructure;
+    }
+
+    public String getSongName() {
+        return songName;
     }
 }

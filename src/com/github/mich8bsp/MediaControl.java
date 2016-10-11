@@ -1,13 +1,15 @@
 package com.github.mich8bsp;
 
 import javafx.application.Platform;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
-import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 import java.util.LinkedList;
@@ -28,19 +30,19 @@ public class MediaControl extends BorderPane {
 
     private List<SongEvents> songEventObservers = new LinkedList<>();
 
-    public MediaControl(MediaPlayer mp, SongStructure tabStructure, SongStructure lyricsStructure) {
+    public MediaControl(MediaPlayer mp, SongStructure tabStructure, SongStructure lyricsStructure, SongManager songManager) {
         this.mp = mp;
         this.tabStructure = tabStructure;
         this.lyricsStructure = lyricsStructure;
 
-        buildView();
+        buildView(songManager.getSongsList());
         buildPlaybackControls();
         buildTimeControls();
         buildVolumeControls();
         setBottom(mediaBar);
     }
 
-    private void buildView() {
+    private void buildView(ListView songsList) {
         BorderPane mvPane = new BorderPane();
 
         tabTextField = new TextArea();
@@ -52,8 +54,11 @@ public class MediaControl extends BorderPane {
             lyricsTextField = new TextArea();
             lyricsTextField.setText(lyricsStructure.getCurrentPart(0));
             lyricsTextField.setWrapText(true);
-            mvPane.setRight(lyricsTextField);
+            mvPane.setCenter(lyricsTextField);
         }
+
+        mvPane.setRight(songsList);
+
         setCenter(mvPane);
 
         mediaBar = new HBox();
@@ -211,6 +216,10 @@ public class MediaControl extends BorderPane {
 
     public void addEventObserver(SongEvents observer) {
         songEventObservers.add(observer);
+    }
+
+    public List<SongEvents> getSongEventObservers() {
+        return songEventObservers;
     }
 
     private void skipToNext(){

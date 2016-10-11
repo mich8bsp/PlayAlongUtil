@@ -5,7 +5,9 @@ package com.github.mich8bsp;/**
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -32,7 +34,7 @@ public class TabMediaPlayer extends Application implements SongEvents{
             return;
         }
         songManager = new SongManager();
-        songManager.init(dir);
+        songManager.init(dir,this);
 
         Group root = new Group();
         scene = new Scene(root);
@@ -50,11 +52,15 @@ public class TabMediaPlayer extends Application implements SongEvents{
     @Override
     public void onSongChange() {
         SongBundle nextSong = songManager.getNextSong();
-        MediaControl nextSongControl = nextSong.getMediaControl();
+       changeSong(nextSong);
+    }
+
+    public void changeSong(SongBundle song){
+        MediaControl nextSongControl = song.getMediaControl();
         nextSongControl.addEventObserver(this);
         scene.setRoot(nextSongControl);
-        nextSong.getMediaPlayer().currentTimeProperty().addListener(ov -> nextSongControl.updateValues());
+        song.getMediaPlayer().currentTimeProperty().addListener(ov -> nextSongControl.updateValues());
 
-        nextSong.getMediaPlayer().play();
+        song.getMediaPlayer().play();
     }
 }
