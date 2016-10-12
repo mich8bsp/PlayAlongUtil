@@ -10,6 +10,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.util.LinkedList;
@@ -46,15 +48,14 @@ public class MediaControl extends BorderPane {
         BorderPane mvPane = new BorderPane();
 
         tabTextField = new TextArea();
+        tabTextField.setFont(Font.font("Courier New", 12));
         tabTextField.setText(tabStructure.getCurrentPart(0));
-        tabTextField.setWrapText(true);
-        mvPane.setLeft(tabTextField);
+        mvPane.setCenter(tabTextField);
 
         if(lyricsStructure!=null) {
             lyricsTextField = new TextArea();
             lyricsTextField.setText(lyricsStructure.getCurrentPart(0));
-            lyricsTextField.setWrapText(true);
-            mvPane.setCenter(lyricsTextField);
+            mvPane.setLeft(lyricsTextField);
         }
 
         mvPane.setRight(songsList);
