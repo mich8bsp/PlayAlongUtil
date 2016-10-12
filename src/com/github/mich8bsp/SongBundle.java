@@ -38,7 +38,7 @@ public class SongBundle {
             }
 
             this.audioFile = resolveAudioFile();
-            String songURL ="file:///" + audioFile.toString().replace("\\", "/").replaceAll(" ", "%20");
+            String songURL = Utils.getSongUrl(audioFile.toString());
             songMedia = new Media(songURL);
             mediaPlayer = new MediaPlayer(songMedia);
             mediaPlayer.setAutoPlay(false);

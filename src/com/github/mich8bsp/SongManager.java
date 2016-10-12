@@ -30,26 +30,12 @@ public class SongManager implements SongEvents, SongControls {
 
     public void init(File dir) {
         List<Path> tabFiles = new LinkedList<>();
-        findTabFiles(dir.toPath(), tabFiles);
+        Utils.findTabFiles(dir.toPath(), tabFiles);
         songNamesList = getSongNames(tabFiles);
         tabFiles.forEach(tab -> allSongBundles.add(new SongBundle(tab, this)));
     }
 
-    private void findTabFiles(Path dir, List<Path> tabFiles) {
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
-            for (Path entry : stream) {
-                if (Files.isDirectory(entry)) {
-                    findTabFiles(entry, tabFiles);
-                } else {
-                    if (entry.getFileName().toString().endsWith("tabs")) {
-                        tabFiles.add(entry);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     public void setToShuffle(boolean toShuffle) {
         this.toShuffle = toShuffle;
