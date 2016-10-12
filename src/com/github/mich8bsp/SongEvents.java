@@ -6,4 +6,7 @@ package com.github.mich8bsp;
 public interface SongEvents {
 
     void onSongChange();
+
+    void changeSong(SongBundle song);
+
 }

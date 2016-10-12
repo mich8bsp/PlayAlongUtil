@@ -15,23 +15,24 @@ import java.util.stream.IntStream;
 /**
  * Created by mich8 on 07-Oct-16.
  */
-public class SongManager {
+public class SongManager implements SongEvents, SongControls {
 
+    private final ViewUpdater viewUpdater;
     private int nextSongIndex = 0;
     private int currentSongIndex = 0;
     private boolean toShuffle = false;
     private List<SongBundle> allSongBundles = new ArrayList<>();
-    private ObservableList<String> songsList;
-    private TabMediaPlayer player;
+    private ObservableList<String> songNamesList;
 
-    public void init(File dir, TabMediaPlayer player) {
+    public SongManager(ViewUpdater viewUpdater){
+        this.viewUpdater = viewUpdater;
+    }
+
+    public void init(File dir) {
         List<Path> tabFiles = new LinkedList<>();
         findTabFiles(dir.toPath(), tabFiles);
-        this.player = player;
-        songsList = getSongNames(tabFiles);
+        songNamesList = getSongNames(tabFiles);
         tabFiles.forEach(tab -> allSongBundles.add(new SongBundle(tab, this)));
-
-
     }
 
     private void findTabFiles(Path dir, List<Path> tabFiles) {
@@ -76,25 +77,61 @@ public class SongManager {
         return songNames;
     }
 
-    public ListView getSongsList() {
-        ListView songListView = new ListView();
-        songListView.setItems(songsList);
+    public ListView<String> getSongsList() {
+        ListView<String> songListView = new ListView<>();
+        songListView.setItems(songNamesList);
         songListView.getSelectionModel().selectedItemProperty().addListener(
                 (ov, old_val, new_val) -> {
+                    //if user clicked on a song in song list, it's name is in new_val
                     SongBundle oldSong = allSongBundles.get(currentSongIndex);
                     for (int i = 0; i < allSongBundles.size(); i++) {
                         SongBundle newSong = allSongBundles.get(i);
+                        //we find the new song in all the bundles and switch songs
                         if (newSong.getSongName().equals(new_val)) {
+                            //stop the old song
                             oldSong.getMediaPlayer().stop();
-                            oldSong.getMediaControl().getSongEventObservers().clear();
+                            //update current and next song indexes
                             currentSongIndex = i;
                             findNextSongIndex();
-                            player.changeSong(newSong);
+                            //change to new song
+                            changeSong(newSong);
                             return;
                         }
                     }
                 }
         );
         return songListView;
+    }
+
+    /** Find next song to play (consecutive or random), and change to that song
+     *
+     */
+    @Override
+    public void onSongChange() {
+        SongBundle nextSong = getNextSong();
+        changeSong(nextSong);
+    }
+
+    /** change to specific song
+     *
+     * @param song
+     */
+    public void changeSong(SongBundle song) {
+        MediaControl nextSongControl = song.getMediaControl();
+        viewUpdater.updateView(nextSongControl);
+        song.getMediaPlayer().currentTimeProperty().addListener(ov -> nextSongControl.updateValues());
+        song.getMediaPlayer().play();
+    }
+
+    @Override
+    public void onShuffleChanged() {
+        setToShuffle(!toShuffle);
+        findNextSongIndex();
+    }
+
+
+    @Override
+    public boolean isShuffleOn() {
+        return toShuffle;
     }
 }

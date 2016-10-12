@@ -5,15 +5,14 @@ package com.github.mich8bsp;/**
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Group;
-import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.List;
 
-public class TabMediaPlayer extends Application implements SongEvents{
+public class TabMediaPlayer extends Application implements ViewUpdater {
 
     private static final String MUSIC_DIR = "C:\\Music";
     private SongManager songManager;
@@ -33,12 +32,16 @@ public class TabMediaPlayer extends Application implements SongEvents{
             Platform.exit();
             return;
         }
-        songManager = new SongManager();
-        songManager.init(dir,this);
+        songManager = new SongManager(this);
+        songManager.init(dir);
 
         Group root = new Group();
         scene = new Scene(root);
-        onSongChange();
+
+        //play the first song
+        songManager.onSongChange();
+
+        //stage scene
         primaryStage.setScene(scene);
         primaryStage.setMaximized(true);
         primaryStage.show();
@@ -49,18 +52,9 @@ public class TabMediaPlayer extends Application implements SongEvents{
         launch(args);
     }
 
+
     @Override
-    public void onSongChange() {
-        SongBundle nextSong = songManager.getNextSong();
-       changeSong(nextSong);
-    }
-
-    public void changeSong(SongBundle song){
-        MediaControl nextSongControl = song.getMediaControl();
-        nextSongControl.addEventObserver(this);
-        scene.setRoot(nextSongControl);
-        song.getMediaPlayer().currentTimeProperty().addListener(ov -> nextSongControl.updateValues());
-
-        song.getMediaPlayer().play();
+    public void updateView(Parent root) {
+        scene.setRoot(root);
     }
 }

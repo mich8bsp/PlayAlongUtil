@@ -7,13 +7,13 @@ import java.util.List;
  * Created by mich8 on 02-Oct-16.
  */
 public class SongPart {
-    private List<String> tabs = new LinkedList<>();
+    private List<String> songPartInLines = new LinkedList<>();
 
     public void addLine(String line) {
-        tabs.add(line);
+        songPartInLines.add(line);
     }
 
     public String getAsString(){
-        return String.join("\n", tabs);
+        return String.join("\n", songPartInLines);
     }
 }
