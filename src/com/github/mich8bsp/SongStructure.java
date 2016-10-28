@@ -30,6 +30,7 @@ public class SongStructure {
                 String songPart = line.substring(0, line.lastIndexOf("-"));
                 String time = line.substring(line.lastIndexOf("-")+1, line.length());
                 if(songPart.matches("\\[.*\\]")){
+                    time = time.replaceAll(" ", "");
                     if(time.matches("[0-9]+:[0-9]+")){
                         songPart = songPart.replaceAll("\\[", "");
                         songPart = songPart.replaceAll("]", "");

@@ -74,14 +74,16 @@ public class SongManager implements SongEvents, SongControls {
                         SongBundle newSong = allSongBundles.get(i);
                         //we find the new song in all the bundles and switch songs
                         if (newSong.getSongName().equals(new_val)) {
-                            //stop the old song
-                            oldSong.getMediaPlayer().stop();
-                            //update current and next song indexes
-                            currentSongIndex = i;
-                            findNextSongIndex();
-                            //change to new song
-                            changeSong(newSong);
-                            return;
+                            if(!newSong.getSongName().equals(oldSong.getSongName())) {
+                                //stop the old song
+                                oldSong.getMediaPlayer().stop();
+                                //update current and next song indexes
+                                currentSongIndex = i;
+                                findNextSongIndex();
+                                //change to new song
+                                changeSong(newSong);
+                                return;
+                            }
                         }
                     }
                 }
