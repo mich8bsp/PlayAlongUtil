@@ -1,13 +1,11 @@
 package com.github.mich8bsp;
 
+import com.github.mich8bsp.mediaplayer.MediaControl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -15,16 +13,16 @@ import java.util.stream.IntStream;
 /**
  * Created by mich8 on 07-Oct-16.
  */
-public class SongManager implements SongEvents, SongControls {
+public class SongManager implements ISongEvents, ISongControls {
 
-    private final ViewUpdater viewUpdater;
+    private final IViewUpdater viewUpdater;
     private int nextSongIndex = 0;
     private int currentSongIndex = 0;
     private boolean toShuffle = false;
     private List<SongBundle> allSongBundles = new ArrayList<>();
     private ObservableList<String> songNamesList;
 
-    public SongManager(ViewUpdater viewUpdater){
+    public SongManager(IViewUpdater viewUpdater){
         this.viewUpdater = viewUpdater;
     }
 

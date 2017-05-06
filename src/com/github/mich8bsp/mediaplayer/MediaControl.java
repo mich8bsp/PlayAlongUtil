@@ -1,5 +1,6 @@
-package com.github.mich8bsp;
+package com.github.mich8bsp.mediaplayer;
 
+import com.github.mich8bsp.*;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,8 +26,8 @@ public class MediaControl extends BorderPane {
     private Label timeLabel;
     private Slider volumeSlider;
     private HBox mediaBar;
-    private SongEvents songEventObserver;
-    private SongControls songControls;
+    private ISongEvents songEventObserver;
+    private ISongControls songControls;
     private ToggleButton shuffleButton;
 
     public MediaControl(MediaPlayer mp, SongStructure tabStructure, SongStructure lyricsStructure, SongManager songManager) {
@@ -160,7 +161,7 @@ public class MediaControl extends BorderPane {
         mediaBar.getChildren().add(volumeSlider);
     }
 
-    protected void updateValues() {
+    public void updateValues() {
         shuffleButton.setSelected(songControls.isShuffleOn());
         if (timeLabel != null && timeSlider != null && volumeSlider != null) {
             Platform.runLater(() -> {
@@ -185,7 +186,7 @@ public class MediaControl extends BorderPane {
         }
     }
 
-    public void setEventObserver(SongEvents observer) {
+    public void setEventObserver(ISongEvents observer) {
         songEventObserver = observer;
     }
 

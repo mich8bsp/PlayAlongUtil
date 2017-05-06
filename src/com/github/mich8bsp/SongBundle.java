@@ -1,5 +1,6 @@
 package com.github.mich8bsp;
 
+import com.github.mich8bsp.mediaplayer.MediaControl;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 

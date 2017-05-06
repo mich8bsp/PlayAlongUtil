@@ -1,7 +1,9 @@
-package com.github.mich8bsp;/**
+package com.github.mich8bsp.mediaplayer;/**
  * Created by mich8 on 07-Oct-16.
  */
 
+import com.github.mich8bsp.SongManager;
+import com.github.mich8bsp.IViewUpdater;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Group;
@@ -12,7 +14,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.List;
 
-public class TabMediaPlayer extends Application implements ViewUpdater {
+public class TabMediaPlayer extends Application implements IViewUpdater {
 
     private static final String MUSIC_DIR = "C:\\Music";
     private SongManager songManager;

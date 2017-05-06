@@ -33,7 +33,7 @@ public class Utils {
         return "file:///" + filePath.replace("\\", "/").replaceAll(" ", "%20");
     }
 
-    protected static String formatTime(Duration elapsed, Duration duration) {
+    public static String formatTime(Duration elapsed, Duration duration) {
         int intElapsed = (int) elapsed.toSeconds();
         int elapsedHours = intElapsed / (60 * 60);
         if (elapsedHours > 0) {
