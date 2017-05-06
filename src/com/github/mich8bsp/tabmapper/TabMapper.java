@@ -5,7 +5,7 @@ import com.github.mich8bsp.SongBundle;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -20,8 +20,33 @@ public class TabMapper {
         parseTab(rawInput);
     }
 
-    public static void parseTab(TabRawInput tab){
-        System.out.println("Parsing " + tab.getTab());
-        //TODO: implement parsing
+    public static TabMappedInput parseTab(TabRawInput tab){
+        List<String> tabLines = Arrays.asList(tab.getTab().split("\n"));
+
+        List<String> songParts = new LinkedList<>();
+        Map<String, List<String>> partNameToPart = new HashMap<>();
+
+        int songPartIndex = 0;
+        List<String> currentPart = new ArrayList<>();
+        for(String line : tabLines){
+            if(line.isEmpty()){
+                continue;
+            }
+            if(line.contains("Capo")){
+                //TODO: handle capo
+                continue;
+            }
+            if(line.contains("[") && line.contains("]")){
+                String currentPartName = line.substring(line.indexOf('[')+1, line.lastIndexOf(']'));
+                songParts.add(currentPartName);
+                currentPart = new ArrayList<>();
+                partNameToPart.put(currentPartName, currentPart);
+                continue;
+            }
+            currentPart.add(line);
+        }
+
+        TabMappedInput mappedInput = new TabMappedInput(songParts, partNameToPart);
+        return mappedInput;
     }
 }
