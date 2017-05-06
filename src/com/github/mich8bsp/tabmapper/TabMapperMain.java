@@ -1,15 +1,8 @@
 package com.github.mich8bsp.tabmapper;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.function.Consumer;
@@ -25,7 +18,7 @@ public class TabMapperMain extends Application {
 
         Scene mainScene = new Scene(new Group());
 
-        Consumer<TabRawInput> onSubmit = input -> mainScene.setRoot(TabMapper.getMapperView(input));
+        Consumer<TabRawInput> onSubmit = input -> mainScene.setRoot(TabMapperView.getMapperView(input));
         mainScene.setRoot(TabInputForm.getInputForm(onSubmit));
 
         primaryStage.setScene(mainScene);
