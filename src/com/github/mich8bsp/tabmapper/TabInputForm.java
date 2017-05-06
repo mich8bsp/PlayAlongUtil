@@ -1,6 +1,5 @@
 package com.github.mich8bsp.tabmapper;
 
-import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -9,7 +8,10 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.util.function.Consumer;
 
 /**
@@ -38,6 +40,12 @@ public class TabInputForm {
         tabHb.getChildren().addAll(tabLabel, tabTextField);
         tabHb.setSpacing(10);
 
+        FileChooser fileChooser = new FileChooser();
+        final Button addAudioButton = new Button("Add audio");
+
+        final File[] audioFile = new File[1];
+        addAudioButton.setOnAction(e -> audioFile[0] = fileChooser.showOpenDialog(new Stage()));
+
         Button submit = new Button("Submit");
 
         submit.setOnAction(event->{
@@ -53,12 +61,12 @@ public class TabInputForm {
                 System.out.println("Missing tabs");
                 return;
             }
-            TabRawInput tabInputForm = new TabRawInput(titleTextField.getText(), artistTextField.getText(), tabTextField.getText());
+            TabRawInput tabInputForm = new TabRawInput(titleTextField.getText(), artistTextField.getText(), tabTextField.getText(), audioFile[0]);
             onSubmit.accept(tabInputForm);
         });
 
         VBox verticalContainer = new VBox();
-        verticalContainer.getChildren().addAll(titleHb, artistHb, tabHb, submit);
+        verticalContainer.getChildren().addAll(titleHb, artistHb, tabHb,addAudioButton, submit);
         verticalContainer.setSpacing(30);
 
         Group root = new Group();

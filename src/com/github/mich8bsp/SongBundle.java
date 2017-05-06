@@ -1,6 +1,7 @@
 package com.github.mich8bsp;
 
 import com.github.mich8bsp.mediaplayer.MediaControl;
+import com.github.mich8bsp.mediaplayer.TabMediaControl;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
@@ -43,7 +44,7 @@ public class SongBundle {
             songMedia = new Media(songURL);
             mediaPlayer = new MediaPlayer(songMedia);
             mediaPlayer.setAutoPlay(false);
-            mediaControl = new MediaControl(mediaPlayer, tabsStructure, lyricsStructure, songManager);
+            mediaControl = new TabMediaControl(mediaPlayer, tabsStructure, lyricsStructure, songManager);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,17 +1,23 @@
 package com.github.mich8bsp.tabmapper;
 
+import java.io.File;
+
 /**
  * Created by mich8 on 06-May-17.
  */
 public class TabRawInput {
+
+
+    private final File audioFile;
     private String title;
     private String artist;
     private String tab;
 
-    public TabRawInput(String title, String artist, String tab) {
+    public TabRawInput(String title, String artist, String tab, File audioFile) {
         this.title = title;
         this.artist = artist;
         this.tab = tab;
+        this.audioFile = audioFile;
     }
 
     public String getTitle() {
@@ -36,5 +42,9 @@ public class TabRawInput {
 
     public void setTab(String tab) {
         this.tab = tab;
+    }
+
+    public File getAudioFile() {
+        return audioFile;
     }
 }

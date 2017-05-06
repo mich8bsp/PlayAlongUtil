@@ -11,34 +11,23 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
-import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 public class MediaControl extends BorderPane {
 
-    private final SongStructure tabStructure;
-    private SongStructure lyricsStructure;
+
     private MediaPlayer mp;
-    private TextArea tabTextArea;
-    private TextArea lyricsTextArea;
+
     private Duration duration;
     private Slider timeSlider;
     private Label timeLabel;
     private Slider volumeSlider;
     private HBox mediaBar;
-    private ISongEvents songEventObserver;
-    private ISongControls songControls;
-    private ToggleButton shuffleButton;
 
-    public MediaControl(MediaPlayer mp, SongStructure tabStructure, SongStructure lyricsStructure, SongManager songManager) {
+    public MediaControl(MediaPlayer mp) {
         this.mp = mp;
-        this.tabStructure = tabStructure;
-        this.lyricsStructure = lyricsStructure;
-        this.songControls = songManager;
-        buildView(songManager.getSongsList());
         buildControls();
 
-        setEventObserver(songManager);
     }
 
     private void buildControls() {
@@ -52,23 +41,7 @@ public class MediaControl extends BorderPane {
         setBottom(mediaBar);
     }
 
-    private void buildView(ListView songsList) {
-        BorderPane mvPane = new BorderPane();
 
-        tabTextArea = new TextArea();
-        tabTextArea.setFont(Font.font("Courier New", 12));
-        tabTextArea.setText(tabStructure.getCurrentPart(0));
-        mvPane.setCenter(tabTextArea);
-
-        if (lyricsStructure != null) {
-            lyricsTextArea = new TextArea();
-            lyricsTextArea.setText(lyricsStructure.getCurrentPart(0));
-            mvPane.setLeft(lyricsTextArea);
-        }
-
-        mvPane.setRight(songsList);
-        setCenter(mvPane);
-    }
 
     private void buildPlaybackControls() {
         final Button playButton = new Button(">");
@@ -105,16 +78,14 @@ public class MediaControl extends BorderPane {
 
         mediaBar.getChildren().add(skipButton);
 
-        shuffleButton = new ToggleButton("RND");
-
-        shuffleButton.setOnAction(event->{
-            songControls.onShuffleChanged();
-            shuffleButton.setSelected(songControls.isShuffleOn());
-        });
-        mediaBar.getChildren().add(shuffleButton);
+        addAdditionalToMediaBar(mediaBar);
         // Add spacer
         Label spacer = new Label("   ");
         mediaBar.getChildren().add(spacer);
+
+    }
+
+    protected void addAdditionalToMediaBar(HBox mediaBar){
 
     }
 
@@ -162,7 +133,6 @@ public class MediaControl extends BorderPane {
     }
 
     public void updateValues() {
-        shuffleButton.setSelected(songControls.isShuffleOn());
         if (timeLabel != null && timeSlider != null && volumeSlider != null) {
             Platform.runLater(() -> {
                 Duration currentTime = mp.getCurrentTime();
@@ -173,10 +143,7 @@ public class MediaControl extends BorderPane {
                         && !timeSlider.isValueChanging()) {
                     timeSlider.setValue(currentTime.divide(duration.toMillis()).toMillis()
                             * 100.0);
-                    tabTextArea.setText(tabStructure.getCurrentPart(currentTime.toSeconds()));
-                    if (lyricsStructure != null) {
-                        lyricsTextArea.setText(lyricsStructure.getCurrentPart(currentTime.toSeconds()));
-                    }
+                    updateAdditionalValues(currentTime.toSeconds());
                 }
                 if (!volumeSlider.isValueChanging()) {
                     volumeSlider.setValue(Math.round(mp.getVolume()
@@ -186,14 +153,12 @@ public class MediaControl extends BorderPane {
         }
     }
 
-    public void setEventObserver(ISongEvents observer) {
-        songEventObserver = observer;
+    public void updateAdditionalValues(double time) {
+
     }
 
-    private void skipToNext() {
+
+    protected void skipToNext() {
         mp.stop();
-        if (songEventObserver != null) {
-            songEventObserver.onSongChange();
-        }
     }
 }

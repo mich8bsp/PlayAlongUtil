@@ -1,7 +1,6 @@
 package com.github.mich8bsp.tabmapper;
 
-import com.github.mich8bsp.SongBundle;
-
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,7 +15,7 @@ public class TabMapper {
     public static void main(String[] args) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get("test-tab"));
         String tab = lines.stream().collect(Collectors.joining("\n"));
-        TabRawInput rawInput = new TabRawInput("songysong", "artyart", tab);
+        TabRawInput rawInput = new TabRawInput("songysong", "artyart", tab, null);
         parseTab(rawInput);
     }
 
@@ -26,7 +25,6 @@ public class TabMapper {
         List<String> songParts = new LinkedList<>();
         Map<String, List<String>> partNameToPart = new HashMap<>();
 
-        int songPartIndex = 0;
         List<String> currentPart = new ArrayList<>();
         for(String line : tabLines){
             if(line.isEmpty()){
@@ -46,7 +44,6 @@ public class TabMapper {
             currentPart.add(line);
         }
 
-        TabMappedInput mappedInput = new TabMappedInput(songParts, partNameToPart);
-        return mappedInput;
+        return new TabMappedInput(songParts, partNameToPart, tab.getAudioFile());
     }
 }
