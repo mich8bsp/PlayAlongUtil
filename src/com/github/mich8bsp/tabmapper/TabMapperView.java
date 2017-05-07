@@ -1,5 +1,6 @@
 package com.github.mich8bsp.tabmapper;
 
+import com.github.mich8bsp.Utils;
 import com.github.mich8bsp.mediaplayer.MediaControl;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -26,7 +27,7 @@ public class TabMapperView {
                 .map(Button::new)
                 .collect(Collectors.toList());
         VBox box = new VBox(10);
-        MediaControl mediaControl = getMediaControl(mappedInput.getAudioFile().getPath());
+        MediaControl mediaControl = getMediaControl(Utils.getSongUrl(mappedInput.getAudioFile().getAbsolutePath()));
         box.getChildren().add(mediaControl);
         box.getChildren().addAll(buttonList);
         return box;
@@ -36,6 +37,9 @@ public class TabMapperView {
         Media songMedia = new Media(audioFilePath);
         MediaPlayer mediaPlayer = new MediaPlayer(songMedia);
         mediaPlayer.setAutoPlay(false);
-        return new MediaControl(mediaPlayer);
+
+        MediaControl mediaControl = new MediaControl(mediaPlayer);
+        mediaPlayer.currentTimeProperty().addListener(ov -> mediaControl.updateValues());
+        return mediaControl;
     }
 }

@@ -4,6 +4,7 @@ import com.github.mich8bsp.ISongControls;
 import com.github.mich8bsp.ISongEvents;
 import com.github.mich8bsp.SongManager;
 import com.github.mich8bsp.SongStructure;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleButton;
@@ -34,6 +35,12 @@ public class TabMediaControl extends MediaControl {
         setEventObserver(songManager);
     }
 
+    @Override
+    protected void buildPlaybackControls() {
+        super.buildPlaybackControls();
+        getMediaPlayer().setOnEndOfMedia(this::skipToNext);
+    }
+
     private void buildView(ListView songsList) {
         BorderPane mvPane = new BorderPane();
 
@@ -56,16 +63,22 @@ public class TabMediaControl extends MediaControl {
         songEventObserver = observer;
     }
 
-    @Override
     protected void skipToNext() {
-       super.skipToNext();
+       super.stop();
         if (songEventObserver != null) {
             songEventObserver.onSongChange();
         }
     }
 
+
     @Override
     protected void addAdditionalToMediaBar(HBox mediaBar){
+        Button skipButton = new Button(">>");
+        skipButton.setOnAction(event -> skipToNext());
+
+        mediaBar.getChildren().add(skipButton);
+
+
         shuffleButton = new ToggleButton("RND");
 
         shuffleButton.setOnAction(event->{

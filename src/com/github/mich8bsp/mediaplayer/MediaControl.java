@@ -27,7 +27,10 @@ public class MediaControl extends BorderPane {
     public MediaControl(MediaPlayer mp) {
         this.mp = mp;
         buildControls();
+    }
 
+    public MediaPlayer getMediaPlayer(){
+        return mp;
     }
 
     private void buildControls() {
@@ -41,9 +44,7 @@ public class MediaControl extends BorderPane {
         setBottom(mediaBar);
     }
 
-
-
-    private void buildPlaybackControls() {
+    protected void buildPlaybackControls() {
         final Button playButton = new Button(">");
 
         playButton.setOnAction(e -> {
@@ -64,25 +65,32 @@ public class MediaControl extends BorderPane {
 
         mp.setOnPaused(() -> playButton.setText(">"));
 
+        mp.setOnStopped(() -> playButton.setText(">"));
+
         mp.setOnReady(() -> {
             duration = mp.getMedia().getDuration();
             updateValues();
         });
 
-        mp.setOnEndOfMedia(this::skipToNext);
+        mp.setOnEndOfMedia(this::stop);
 
         mediaBar.getChildren().add(playButton);
 
-        Button skipButton = new Button(">>");
-        skipButton.setOnAction(event -> skipToNext());
+        Button stopButton = new Button("S");
+        stopButton.setOnAction(event -> stop());
 
-        mediaBar.getChildren().add(skipButton);
+        mediaBar.getChildren().add(stopButton);
 
         addAdditionalToMediaBar(mediaBar);
         // Add spacer
         Label spacer = new Label("   ");
         mediaBar.getChildren().add(spacer);
 
+    }
+
+    protected void stop() {
+        mp.stop();
+        updateValues();
     }
 
     protected void addAdditionalToMediaBar(HBox mediaBar){
@@ -158,7 +166,4 @@ public class MediaControl extends BorderPane {
     }
 
 
-    protected void skipToNext() {
-        mp.stop();
-    }
 }
