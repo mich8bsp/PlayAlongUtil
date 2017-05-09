@@ -56,6 +56,8 @@ public class MediaControl extends BorderPane {
                     || status == Status.READY
                     || status == Status.STOPPED) {
                 mp.play();
+                mp.currentTimeProperty().addListener(ov -> updateValues());
+
             } else {
                 mp.pause();
             }

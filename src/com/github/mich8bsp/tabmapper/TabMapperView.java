@@ -38,8 +38,6 @@ public class TabMapperView {
         MediaPlayer mediaPlayer = new MediaPlayer(songMedia);
         mediaPlayer.setAutoPlay(false);
 
-        MediaControl mediaControl = new MediaControl(mediaPlayer);
-        mediaPlayer.currentTimeProperty().addListener(ov -> mediaControl.updateValues());
-        return mediaControl;
+        return new MediaControl(mediaPlayer);
     }
 }
