@@ -33,42 +33,30 @@ public class Utils {
         return "file:///" + filePath.replace("\\", "/").replaceAll(" ", "%20");
     }
 
-    public static String formatTime(Duration elapsed, Duration duration) {
-        int intElapsed = (int) elapsed.toSeconds();
-        int elapsedHours = intElapsed / (60 * 60);
-        if (elapsedHours > 0) {
-            intElapsed -= elapsedHours * 60 * 60;
+    public static String formatTime(Duration time){
+        int roundedSeconds = (int) time.toSeconds();
+        int hours = roundedSeconds / (60 * 60);
+        if (hours > 0) {
+            roundedSeconds -= hours * 60 * 60;
         }
-        int elapsedMinutes = intElapsed / 60;
-        int elapsedSeconds = intElapsed - elapsedHours * 60 * 60
-                - elapsedMinutes * 60;
+        int minutes = roundedSeconds / 60;
+        int seconds = roundedSeconds - hours * 60 * 60
+                - minutes * 60;
+        if(hours>0) {
+            return String.format("%d:%02d:%02d", hours, minutes, seconds);
+        }else{
+            return String.format("%02d:%02d", minutes, seconds);
+        }
+    }
+
+    public static String formatTime(Duration elapsed, Duration duration) {
+        String elapsedTimeStr = formatTime(elapsed);
 
         if (duration.greaterThan(Duration.ZERO)) {
-            int intDuration = (int) duration.toSeconds();
-            int durationHours = intDuration / (60 * 60);
-            if (durationHours > 0) {
-                intDuration -= durationHours * 60 * 60;
-            }
-            int durationMinutes = intDuration / 60;
-            int durationSeconds = intDuration - durationHours * 60 * 60
-                    - durationMinutes * 60;
-            if (durationHours > 0) {
-                return String.format("%d:%02d:%02d/%d:%02d:%02d",
-                        elapsedHours, elapsedMinutes, elapsedSeconds,
-                        durationHours, durationMinutes, durationSeconds);
-            } else {
-                return String.format("%02d:%02d/%02d:%02d",
-                        elapsedMinutes, elapsedSeconds, durationMinutes,
-                        durationSeconds);
-            }
+            String durationTimeStr = formatTime(duration);
+            return elapsedTimeStr + "/" + durationTimeStr;
         } else {
-            if (elapsedHours > 0) {
-                return String.format("%d:%02d:%02d", elapsedHours,
-                        elapsedMinutes, elapsedSeconds);
-            } else {
-                return String.format("%02d:%02d", elapsedMinutes,
-                        elapsedSeconds);
-            }
+            return elapsedTimeStr;
         }
     }
 }
