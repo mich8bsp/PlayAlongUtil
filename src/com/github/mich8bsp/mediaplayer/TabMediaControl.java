@@ -1,9 +1,5 @@
 package com.github.mich8bsp.mediaplayer;
 
-import com.github.mich8bsp.ISongControls;
-import com.github.mich8bsp.ISongEvents;
-import com.github.mich8bsp.SongManager;
-import com.github.mich8bsp.SongStructure;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;

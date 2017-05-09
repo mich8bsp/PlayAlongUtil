@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class Utils {
 
-    protected static void findTabFiles(Path dir, List<Path> tabFiles) {
+    public static void findTabFiles(Path dir, List<Path> tabFiles) {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
             for (Path entry : stream) {
                 if (Files.isDirectory(entry)) {

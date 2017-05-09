@@ -1,4 +1,4 @@
-package com.github.mich8bsp;
+package com.github.mich8bsp.mediaplayer;
 
 /**
  * Created by mich8 on 07-Oct-16.

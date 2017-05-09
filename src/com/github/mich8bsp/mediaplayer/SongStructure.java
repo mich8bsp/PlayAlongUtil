@@ -1,4 +1,4 @@
-package com.github.mich8bsp;
+package com.github.mich8bsp.mediaplayer;
 
 import java.io.IOException;
 import java.nio.file.Files;

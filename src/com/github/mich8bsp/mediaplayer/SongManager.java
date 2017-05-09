@@ -1,6 +1,6 @@
-package com.github.mich8bsp;
+package com.github.mich8bsp.mediaplayer;
 
-import com.github.mich8bsp.mediaplayer.MediaControl;
+import com.github.mich8bsp.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;

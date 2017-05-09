@@ -2,8 +2,6 @@ package com.github.mich8bsp.mediaplayer;/**
  * Created by mich8 on 07-Oct-16.
  */
 
-import com.github.mich8bsp.SongManager;
-import com.github.mich8bsp.IViewUpdater;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Group;

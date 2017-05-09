@@ -1,7 +1,6 @@
-package com.github.mich8bsp;
+package com.github.mich8bsp.mediaplayer;
 
-import com.github.mich8bsp.mediaplayer.MediaControl;
-import com.github.mich8bsp.mediaplayer.TabMediaControl;
+import com.github.mich8bsp.Utils;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 

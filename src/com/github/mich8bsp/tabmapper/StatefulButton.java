@@ -25,8 +25,4 @@ public class StatefulButton<T> extends Button {
     public String getInitialText() {
         return initialText;
     }
-
-    public void setInitialText(String initialText) {
-        this.initialText = initialText;
-    }
 }

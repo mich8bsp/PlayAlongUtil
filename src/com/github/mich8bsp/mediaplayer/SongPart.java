@@ -1,4 +1,4 @@
-package com.github.mich8bsp;
+package com.github.mich8bsp.mediaplayer;
 
 import java.util.LinkedList;
 import java.util.List;
