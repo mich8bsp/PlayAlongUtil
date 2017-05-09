@@ -2,10 +2,7 @@ package com.github.mich8bsp.tabmapper;
 
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -13,32 +10,37 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Created by mich8 on 06-May-17.
  */
 public class TabInputForm {
 
+    public static class InputField extends HBox{
+        private TextInputControl textField;
+
+        public InputField(String label){
+            this(label, TextField::new);
+        }
+
+        public InputField(String label, Supplier<TextInputControl> inputFieldSupplier){
+            textField = inputFieldSupplier.get();
+            getChildren().addAll(new Label(label), textField);
+            setSpacing(10);
+        }
+
+        public String getInputText(){
+            return textField.getText();
+        }
+
+    }
+
     public static Parent getInputForm(Consumer<TabRawInput> onSubmit){
 
-        Label songTitle = new Label("Title:");
-        TextField titleTextField = new TextField();
-        HBox titleHb = new HBox();
-        titleHb.getChildren().addAll(songTitle, titleTextField);
-        titleHb.setSpacing(10);
-
-        Label artist = new Label("Artist:");
-        TextField artistTextField = new TextField();
-        HBox artistHb = new HBox();
-        artistHb.getChildren().addAll(artist, artistTextField);
-        artistHb.setSpacing(10);
-
-        Label tabLabel = new Label("Tab:");
-        TextArea tabTextField = new TextArea();
-
-        HBox tabHb = new HBox();
-        tabHb.getChildren().addAll(tabLabel, tabTextField);
-        tabHb.setSpacing(10);
+        InputField title = new InputField("Title:");
+        InputField artist = new InputField("Artist:");
+        InputField tab = new InputField("Tab:", TextArea::new);
 
         FileChooser fileChooser = new FileChooser();
         final Button addAudioButton = new Button("Add audio");
@@ -49,24 +51,27 @@ public class TabInputForm {
         Button submit = new Button("Submit");
 
         submit.setOnAction(event->{
-            if(titleTextField.getText().isEmpty()){
+            String inputTitle = title.getInputText();
+            String inputArtist = artist.getInputText();
+            String inputTab = tab.getInputText();
+            if(inputTitle.isEmpty()){
                 System.out.println("Missing title field");
                 return;
             }
-            if(artistTextField.getText().isEmpty()){
+            if(inputArtist.isEmpty()){
                 System.out.println("Missing artist field");
                 return;
             }
-            if(tabTextField.getText().isEmpty()){
+            if(inputTab.isEmpty()){
                 System.out.println("Missing tabs");
                 return;
             }
-            TabRawInput tabInputForm = new TabRawInput(titleTextField.getText(), artistTextField.getText(), tabTextField.getText(), audioFile[0]);
+            TabRawInput tabInputForm = new TabRawInput(inputTitle, inputArtist, inputTab, audioFile[0]);
             onSubmit.accept(tabInputForm);
         });
 
         VBox verticalContainer = new VBox();
-        verticalContainer.getChildren().addAll(titleHb, artistHb, tabHb,addAudioButton, submit);
+        verticalContainer.getChildren().addAll(title, artist, tab, addAudioButton, submit);
         verticalContainer.setSpacing(30);
 
         Group root = new Group();
