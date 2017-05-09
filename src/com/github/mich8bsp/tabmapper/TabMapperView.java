@@ -3,6 +3,7 @@ package com.github.mich8bsp.tabmapper;
 import com.github.mich8bsp.Utils;
 import com.github.mich8bsp.mediaplayer.MediaControl;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -24,7 +25,15 @@ public class TabMapperView {
         List<StatefulButton<Duration>> buttonList = createTaggableSongParts(mappedInput, mediaControl.getMediaPlayer());
         box.getChildren().add(mediaControl);
         box.getChildren().addAll(buttonList);
+
+        Button submitButton = new Button("Submit");
+        submitButton.setOnAction(e -> saveTaggedSong(buttonList));
+        box.getChildren().add(submitButton);
         return new ScrollPane(box);
+    }
+
+    private static void saveTaggedSong(List<StatefulButton<Duration>> buttonList) {
+        //FIXME: to be implemented. for example store to db
     }
 
     private static List<StatefulButton<Duration>> createTaggableSongParts(TabMappedInput mappedInput, MediaPlayer mediaPlayer) {
