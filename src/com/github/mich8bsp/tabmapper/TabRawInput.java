@@ -7,7 +7,6 @@ import java.io.File;
  */
 public class TabRawInput {
 
-
     private final File audioFile;
     private String title;
     private String artist;

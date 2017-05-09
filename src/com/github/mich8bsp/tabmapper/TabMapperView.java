@@ -18,16 +18,17 @@ import java.util.stream.Collectors;
  */
 public class TabMapperView {
 
-    public static Parent getMapperView(TabRawInput input) {
+    static Parent getMapperView(TabRawInput input) {
         TabMappedInput mappedInput = TabMapper.parseTab(input);
-        VBox box = new VBox(10);
         MediaControl mediaControl = getMediaControl(Utils.getSongUrl(mappedInput.getAudioFile().getAbsolutePath()));
-        List<StatefulButton<Duration>> buttonList = createTaggableSongParts(mappedInput, mediaControl.getMediaPlayer());
+        List<StatefulButton<Duration>> songParts = createTaggableSongParts(mappedInput, mediaControl.getMediaPlayer());
+
+        VBox box = new VBox(10);
         box.getChildren().add(mediaControl);
-        box.getChildren().addAll(buttonList);
+        box.getChildren().addAll(songParts);
 
         Button submitButton = new Button("Submit");
-        submitButton.setOnAction(e -> saveTaggedSong(buttonList));
+        submitButton.setOnAction(e -> saveTaggedSong(songParts));
         box.getChildren().add(submitButton);
         return new ScrollPane(box);
     }
@@ -52,14 +53,14 @@ public class TabMapperView {
         button.setOnAction(e -> {
             Duration currentTimeTagged = mediaPlayer.getCurrentTime();
             button.setState(currentTimeTagged);
+            //we use initialText here instead of text because button can be tagged multiple times
             button.setText("(" + Utils.formatTime(currentTimeTagged) + ") " + button.getInitialText());
         });
         return button;
     }
 
-    public static MediaControl getMediaControl(String audioFilePath) {
-        Media songMedia = new Media(audioFilePath);
-        MediaPlayer mediaPlayer = new MediaPlayer(songMedia);
+    private static MediaControl getMediaControl(String audioFilePath) {
+        MediaPlayer mediaPlayer = new MediaPlayer(new Media(audioFilePath));
         mediaPlayer.setAutoPlay(false);
 
         return new MediaControl(mediaPlayer);
