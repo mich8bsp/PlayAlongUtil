@@ -18,7 +18,10 @@ public class TabMapperMain extends Application {
 
         Scene mainScene = new Scene(new Group());
 
+        // when all user input is received and submit is clicked, we close the input form and open the mapper view
         Consumer<TabRawInput> onSubmit = input -> mainScene.setRoot(TabMapperView.getMapperView(input));
+
+        //open input form on start
         mainScene.setRoot(TabInputForm.getInputForm(onSubmit));
 
         primaryStage.setScene(mainScene);

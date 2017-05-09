@@ -18,6 +18,7 @@ import java.util.function.Supplier;
 public class TabInputForm {
 
     public static class InputField extends HBox{
+
         private TextInputControl textField;
 
         public InputField(String label){
@@ -43,35 +44,49 @@ public class TabInputForm {
         InputField tab = new InputField("Tab:", TextArea::new);
 
         FileChooser fileChooser = new FileChooser();
-        final Button addAudioButton = new Button("Add audio");
 
-        final File[] audioFile = new File[1];
-        addAudioButton.setOnAction(e -> audioFile[0] = fileChooser.showOpenDialog(new Stage()));
+        HBox audioInput = new HBox();
+        audioInput.setSpacing(10);
+        StatefulButton<File> audioSelectButton = new StatefulButton<>("Add audio");
+        Label chosenFileLabel = new Label();
+        audioInput.getChildren().addAll(audioSelectButton, chosenFileLabel);
+
+        audioSelectButton.setOnAction(e -> {
+            File audioFile = fileChooser.showOpenDialog(new Stage());
+            audioSelectButton.setState(audioFile);
+            chosenFileLabel.setText(audioFile.getName());
+        });
 
         Button submit = new Button("Submit");
+
+        Label errors = new Label();
 
         submit.setOnAction(event->{
             String inputTitle = title.getInputText();
             String inputArtist = artist.getInputText();
             String inputTab = tab.getInputText();
+            errors.setText("");
             if(inputTitle.isEmpty()){
-                System.out.println("Missing title field");
-                return;
+                errors.setText(errors.getText() + "Missing title field\n");
             }
             if(inputArtist.isEmpty()){
-                System.out.println("Missing artist field");
-                return;
+                errors.setText(errors.getText() + "Missing artist field\n");
             }
             if(inputTab.isEmpty()){
-                System.out.println("Missing tabs");
+                errors.setText(errors.getText() + "Missing tabs\n");
+            }
+            if(audioSelectButton.getState()==null){
+                errors.setText(errors.getText() + "Missing audio file\n");
+            }
+            if(!errors.getText().isEmpty()){
                 return;
             }
-            TabRawInput tabInputForm = new TabRawInput(inputTitle, inputArtist, inputTab, audioFile[0]);
+            TabRawInput tabInputForm = new TabRawInput(inputTitle, inputArtist, inputTab, audioSelectButton.getState());
             onSubmit.accept(tabInputForm);
         });
 
         VBox verticalContainer = new VBox();
-        verticalContainer.getChildren().addAll(title, artist, tab, addAudioButton, submit);
+        verticalContainer.getChildren().addAll(title, artist, tab, audioInput, submit, errors);
         verticalContainer.setSpacing(30);
 
         Group root = new Group();

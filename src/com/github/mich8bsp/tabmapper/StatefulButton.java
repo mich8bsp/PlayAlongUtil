@@ -7,6 +7,8 @@ import javafx.scene.control.Button;
  */
 public class StatefulButton<T> extends Button {
     private T state;
+
+    //because we change the text of this button by prepending the state, we want to store the original text
     private String initialText;
 
     public StatefulButton(String text) {
