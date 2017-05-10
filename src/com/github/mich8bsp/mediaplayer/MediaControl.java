@@ -5,6 +5,8 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -45,7 +47,16 @@ public class MediaControl extends BorderPane {
     }
 
     protected void buildPlaybackControls() {
-        final Button playButton = new Button(">");
+        ImageView playButtonImg = new ImageView(new Image("play-button.png"));
+        playButtonImg.setFitHeight(20);
+        playButtonImg.setFitWidth(20);
+        final Button playButton = new Button("", playButtonImg);
+
+        ImageView pauseButtonImg = new ImageView(new Image("pause-button.png"));
+        pauseButtonImg.setFitHeight(20);
+        pauseButtonImg.setFitWidth(20);
+
+
 
         playButton.setOnAction(e -> {
             Status status = mp.getStatus();
@@ -63,11 +74,11 @@ public class MediaControl extends BorderPane {
             }
         });
 
-        mp.setOnPlaying(() -> playButton.setText("||"));
+        mp.setOnPlaying(() -> playButton.setGraphic(pauseButtonImg));
 
-        mp.setOnPaused(() -> playButton.setText(">"));
+        mp.setOnPaused(() -> playButton.setGraphic(playButtonImg));
 
-        mp.setOnStopped(() -> playButton.setText(">"));
+        mp.setOnStopped(() -> playButton.setGraphic(playButtonImg));
 
         mp.setOnReady(() -> {
             duration = mp.getMedia().getDuration();
@@ -78,7 +89,11 @@ public class MediaControl extends BorderPane {
 
         mediaBar.getChildren().add(playButton);
 
-        Button stopButton = new Button("S");
+        ImageView stopButtonImg = new ImageView(new Image("stop-button.png"));
+        stopButtonImg.setFitHeight(20);
+        stopButtonImg.setFitWidth(20);
+        final Button stopButton = new Button("", stopButtonImg);
+
         stopButton.setOnAction(event -> stop());
 
         mediaBar.getChildren().add(stopButton);
