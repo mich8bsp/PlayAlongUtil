@@ -1,5 +1,6 @@
-package com.github.mich8bsp.tabmapper;
+package com.github.mich8bsp.tabmapper.input;
 
+import com.github.mich8bsp.tabmapper.view.StatefulButton;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.*;

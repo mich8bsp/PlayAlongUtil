@@ -1,4 +1,4 @@
-package com.github.mich8bsp.tabmapper;
+package com.github.mich8bsp.tabmapper.input;
 
 import java.io.File;
 

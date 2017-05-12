@@ -1,14 +1,17 @@
-package com.github.mich8bsp.tabmapper;
+package com.github.mich8bsp.tabmapper.view;
 
 import com.github.mich8bsp.Utils;
 import com.github.mich8bsp.mediaplayer.MediaControl;
+import com.github.mich8bsp.tabmapper.songstructure.SongSection;
+import com.github.mich8bsp.tabmapper.input.TabRawInput;
+import com.github.mich8bsp.tabmapper.input.TabMappedInput;
+import com.github.mich8bsp.tabmapper.parsing.TabMapper;
 import javafx.geometry.Point2D;
 import javafx.scene.AccessibleAttribute;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
@@ -20,9 +23,9 @@ import java.util.stream.Collectors;
  */
 public class TabMapperView {
 
-    static Parent getMapperView(TabRawInput input) {
+    public static Parent getMapperView(TabRawInput input) {
         TabMappedInput mappedInput = TabMapper.parseTab(input);
-        MediaControl mediaControl = getMediaControl(Utils.getSongUrl(mappedInput.getAudioFile().getAbsolutePath()));
+        MediaControl mediaControl = MediaControl.buildMediaControl(Utils.getSongUrl(mappedInput.getAudioFile().getAbsolutePath()));
         List<StatefulText<Duration>> songParts = createTaggableSongParts(mappedInput, mediaControl.getMediaPlayer());
 
         VBox box = new VBox(10);
@@ -41,6 +44,7 @@ public class TabMapperView {
             if(button.getState()!=null){
                 lastTime=button.getState();
             }else if(lastTime!=null){
+                //if some of the parts were not tagged, we auto-tag them with nearest tagged neighbour that came before
                 button.setState(lastTime);
             }
         }
@@ -54,8 +58,11 @@ public class TabMapperView {
                 .collect(Collectors.toList());
     }
 
-    private static String getPartText(String partName, SongPart part) {
-        return "[" + partName + "]\n\n" + part.getLines().stream().collect(Collectors.joining("\n"));
+    private static String getPartText(String partName, SongSection part) {
+        return "[" + partName + "]\n\n"
+                + part.getLines()
+                .stream()
+                .collect(Collectors.joining("\n"));
     }
 
     private static StatefulText<Duration> createTaggableButton(String text, MediaPlayer mediaPlayer) {
@@ -67,7 +74,7 @@ public class TabMapperView {
                 int index = (int) clickableText.queryAccessibleAttribute(AccessibleAttribute.OFFSET_AT_POINT,
                         new Point2D(e.getScreenX(), e.getScreenY()));
                 System.out.println(index);
-
+                //FIXME: implement dynamic splitting here
             }else{
                 Duration currentTimeTagged = mediaPlayer.getCurrentTime();
                 clickableText.setState(currentTimeTagged);
@@ -78,10 +85,4 @@ public class TabMapperView {
         return clickableText;
     }
 
-    private static MediaControl getMediaControl(String audioFilePath) {
-        MediaPlayer mediaPlayer = new MediaPlayer(new Media(audioFilePath));
-        mediaPlayer.setAutoPlay(false);
-
-        return new MediaControl(mediaPlayer);
-    }
 }

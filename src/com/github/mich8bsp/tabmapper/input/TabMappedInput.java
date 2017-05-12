@@ -1,4 +1,6 @@
-package com.github.mich8bsp.tabmapper;
+package com.github.mich8bsp.tabmapper.input;
+
+import com.github.mich8bsp.tabmapper.songstructure.SongSection;
 
 import java.io.File;
 import java.util.List;
@@ -9,12 +11,11 @@ import java.util.Map;
  */
 public class TabMappedInput {
 
-
     private final File audioFile;
     private List<String> songParts;
-    private Map<String, SongPart> partNameToPart;
+    private Map<String, SongSection> partNameToPart;
 
-    public TabMappedInput(List<String> songParts, Map<String, SongPart> partNameToPart, File audioFile) {
+    public TabMappedInput(List<String> songParts, Map<String, SongSection> partNameToPart, File audioFile) {
         this.songParts = songParts;
         this.partNameToPart = partNameToPart;
         this.audioFile = audioFile;
@@ -28,11 +29,11 @@ public class TabMappedInput {
         this.songParts = songParts;
     }
 
-    public Map<String, SongPart> getPartNameToPart() {
+    public Map<String, SongSection> getPartNameToPart() {
         return partNameToPart;
     }
 
-    public void setPartNameToPart(Map<String, SongPart> partNameToPart) {
+    public void setPartNameToPart(Map<String, SongSection> partNameToPart) {
         this.partNameToPart = partNameToPart;
     }
 

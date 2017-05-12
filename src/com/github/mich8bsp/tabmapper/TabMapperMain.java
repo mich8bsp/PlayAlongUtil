@@ -1,5 +1,8 @@
 package com.github.mich8bsp.tabmapper;
 
+import com.github.mich8bsp.tabmapper.input.TabInputForm;
+import com.github.mich8bsp.tabmapper.input.TabRawInput;
+import com.github.mich8bsp.tabmapper.view.TabMapperView;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;

@@ -1,4 +1,9 @@
-package com.github.mich8bsp.tabmapper;
+package com.github.mich8bsp.tabmapper.parsing;
+
+import com.github.mich8bsp.tabmapper.songstructure.SongSection;
+import com.github.mich8bsp.tabmapper.input.TabRawInput;
+import com.github.mich8bsp.tabmapper.input.TabMappedInput;
+import com.github.mich8bsp.tabmapper.songstructure.TabSegment;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +17,7 @@ import java.util.stream.Collectors;
  */
 public class TabMapper {
 
+    //Test
     public static void main(String[] args) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get("res"+ File.separator+"test-tab"));
         String tab = lines.stream().collect(Collectors.joining("\n"));
@@ -24,14 +30,16 @@ public class TabMapper {
     public static TabMappedInput parseTab(TabRawInput tab){
         List<String> tabLines = Arrays.asList(tab.getTab().split("\n"));
 
-        List<String> songParts = new LinkedList<>();
-        Map<String, SongPart> partNameToPart = new HashMap<>();
+        //this holds the order of the song parts
+        List<String> songSectionNames = new LinkedList<>();
+        Map<String, SongSection> sectionNameToSection = new HashMap<>();
 
-        SongPart currentPart = new SongPart();
+        //if for some reason the whole tab came as a single section, we add it with name of song and later we'll split it dynamically
+        SongSection currentPart = new SongSection();
         TabSegment currentTabSegment = new TabSegment();
         currentPart.addSegment(currentTabSegment);
-        songParts.add(tab.getTitle());
-        partNameToPart.put(tab.getTitle(), currentPart);
+        songSectionNames.add(tab.getTitle());
+        sectionNameToSection.put(tab.getTitle(), currentPart);
 
         for(String line : tabLines){
             if(line.isEmpty()){
@@ -44,19 +52,20 @@ public class TabMapper {
             if(isSongPartName(line)){
                 String currentPartName = line.substring(line.indexOf('[')+1, line.lastIndexOf(']'));
 
-                songParts.add(currentPartName);
+                songSectionNames.add(currentPartName);
 
-                currentPart = new SongPart();
+                currentPart = new SongSection();
                 currentTabSegment = new TabSegment();
                 currentPart.addSegment(currentTabSegment);
 
-                partNameToPart.put(currentPartName, currentPart);
+                sectionNameToSection.put(currentPartName, currentPart);
                 continue;
             }
             ChordSequence chordSequence = ChordSequence.buildChordSequence(line);
 
             if (chordSequence != null) {
                 if(currentTabSegment.getChords()!=null){
+                    //there can be no two chord sequences in a single segment, so we split
                     currentTabSegment = new TabSegment();
                     currentPart.addSegment(currentTabSegment);
                 }
@@ -72,17 +81,17 @@ public class TabMapper {
         }
 
         List<String> partsToRemove = new LinkedList<>();
-        for(String part: songParts){
-            if(partNameToPart.get(part).isEmpty()){
-                partNameToPart.remove(part);
+        for(String part: songSectionNames){
+            if(sectionNameToSection.get(part).isEmpty()){
+                sectionNameToSection.remove(part);
                 partsToRemove.add(part);
             }
         }
 
-        songParts.removeAll(partsToRemove);
+        songSectionNames.removeAll(partsToRemove);
 
 
-        return new TabMappedInput(songParts, partNameToPart, tab.getAudioFile());
+        return new TabMappedInput(songSectionNames, sectionNameToSection, tab.getAudioFile());
     }
 
     private static boolean isSongPartName(String line){

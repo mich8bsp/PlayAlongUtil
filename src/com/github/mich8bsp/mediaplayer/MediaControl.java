@@ -11,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaPlayer.Status;
 import javafx.util.Duration;
@@ -26,7 +27,14 @@ public class MediaControl extends BorderPane {
     private Slider volumeSlider;
     private HBox mediaBar;
 
-    public MediaControl(MediaPlayer mp) {
+    public static MediaControl buildMediaControl(String audioFile){
+        MediaPlayer mediaPlayer = new MediaPlayer(new Media(audioFile));
+        mediaPlayer.setAutoPlay(false);
+
+        return new MediaControl(mediaPlayer);
+    }
+
+    private MediaControl(MediaPlayer mp) {
         this.mp = mp;
         buildControls();
     }
