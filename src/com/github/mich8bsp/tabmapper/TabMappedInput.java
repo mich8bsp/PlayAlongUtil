@@ -12,9 +12,9 @@ public class TabMappedInput {
 
     private final File audioFile;
     private List<String> songParts;
-    private Map<String, List<String>> partNameToPart;
+    private Map<String, SongPart> partNameToPart;
 
-    public TabMappedInput(List<String> songParts, Map<String, List<String>> partNameToPart, File audioFile) {
+    public TabMappedInput(List<String> songParts, Map<String, SongPart> partNameToPart, File audioFile) {
         this.songParts = songParts;
         this.partNameToPart = partNameToPart;
         this.audioFile = audioFile;
@@ -28,11 +28,11 @@ public class TabMappedInput {
         this.songParts = songParts;
     }
 
-    public Map<String, List<String>> getPartNameToPart() {
+    public Map<String, SongPart> getPartNameToPart() {
         return partNameToPart;
     }
 
-    public void setPartNameToPart(Map<String, List<String>> partNameToPart) {
+    public void setPartNameToPart(Map<String, SongPart> partNameToPart) {
         this.partNameToPart = partNameToPart;
     }
 

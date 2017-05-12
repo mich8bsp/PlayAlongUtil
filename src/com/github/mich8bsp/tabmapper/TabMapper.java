@@ -19,13 +19,20 @@ public class TabMapper {
         parseTab(rawInput);
     }
 
+
+
     public static TabMappedInput parseTab(TabRawInput tab){
         List<String> tabLines = Arrays.asList(tab.getTab().split("\n"));
 
         List<String> songParts = new LinkedList<>();
-        Map<String, List<String>> partNameToPart = new HashMap<>();
+        Map<String, SongPart> partNameToPart = new HashMap<>();
 
-        List<String> currentPart = new ArrayList<>();
+        SongPart currentPart = new SongPart();
+        TabSegment currentTabSegment = new TabSegment();
+        currentPart.addSegment(currentTabSegment);
+        songParts.add(tab.getTitle());
+        partNameToPart.put(tab.getTitle(), currentPart);
+
         for(String line : tabLines){
             if(line.isEmpty()){
                 continue;
@@ -34,16 +41,58 @@ public class TabMapper {
                 //TODO: handle capo
                 continue;
             }
-            if(line.contains("[") && line.contains("]")){
+            if(isSongPartName(line)){
                 String currentPartName = line.substring(line.indexOf('[')+1, line.lastIndexOf(']'));
+
                 songParts.add(currentPartName);
-                currentPart = new ArrayList<>();
+
+                currentPart = new SongPart();
+                currentTabSegment = new TabSegment();
+                currentPart.addSegment(currentTabSegment);
+
                 partNameToPart.put(currentPartName, currentPart);
                 continue;
             }
-            currentPart.add(line);
+            ChordSequence chordSequence = ChordSequence.buildChordSequence(line);
+
+            if (chordSequence != null) {
+                if(currentTabSegment.getChords()!=null){
+                    currentTabSegment = new TabSegment();
+                    currentPart.addSegment(currentTabSegment);
+                }
+                currentTabSegment.setChords(chordSequence);
+                continue;
+            }
+
+            if(isTabLine(line)){
+                currentTabSegment.getTabs().add(line);
+                continue;
+            }
+            currentTabSegment.setLyrics(line);
         }
+
+        List<String> partsToRemove = new LinkedList<>();
+        for(String part: songParts){
+            if(partNameToPart.get(part).isEmpty()){
+                partNameToPart.remove(part);
+                partsToRemove.add(part);
+            }
+        }
+
+        songParts.removeAll(partsToRemove);
+
 
         return new TabMappedInput(songParts, partNameToPart, tab.getAudioFile());
     }
+
+    private static boolean isSongPartName(String line){
+        return line.contains("[") && line.contains("]");
+    }
+
+    private static boolean isTabLine(String line){
+        return line.contains("--");
+    }
+
+
+
 }
