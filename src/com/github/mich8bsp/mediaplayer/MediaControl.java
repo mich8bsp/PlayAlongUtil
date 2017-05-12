@@ -34,7 +34,7 @@ public class MediaControl extends BorderPane {
         return new MediaControl(mediaPlayer);
     }
 
-    private MediaControl(MediaPlayer mp) {
+    protected MediaControl(MediaPlayer mp) {
         this.mp = mp;
         buildControls();
     }
