@@ -90,8 +90,12 @@ public class TabMapper {
 
         songSectionNames.removeAll(partsToRemove);
 
-
-        return new TabMappedInput(songSectionNames, sectionNameToSection, tab.getAudioFile());
+        return new TabMappedInput()
+                .setArtist(tab.getArtist())
+                .setTitle(tab.getTitle())
+                .setAudioFile(tab.getAudioFile())
+                .setSectionNames(songSectionNames)
+                .setSectionMapping(sectionNameToSection);
     }
 
     private static boolean isSongPartName(String line){

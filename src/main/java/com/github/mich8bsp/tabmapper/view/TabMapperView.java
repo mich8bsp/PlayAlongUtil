@@ -7,6 +7,7 @@ import com.github.mich8bsp.tabmapper.input.TabRawInput;
 import com.github.mich8bsp.tabmapper.input.TabMappedInput;
 import com.github.mich8bsp.tabmapper.parsing.TabMapper;
 import com.github.mich8bsp.tabmapper.storage.DBStore;
+import com.github.mich8bsp.tabmapper.storage.DBStoredTab;
 import javafx.geometry.Point2D;
 import javafx.scene.AccessibleAttribute;
 import javafx.scene.Parent;
@@ -29,20 +30,18 @@ public class TabMapperView {
         MediaControl mediaControl = MediaControl.buildMediaControl(Utils.getSongUrl(mappedInput.getAudioFile().getAbsolutePath()));
         List<StatefulText<Duration>> songParts = createTaggableSongParts(mappedInput, mediaControl.getMediaPlayer());
 
+        DBStoredTab storedTab = new DBStoredTab(mappedInput, songParts);
+
         VBox box = new VBox(10);
         box.getChildren().add(mediaControl);
         box.getChildren().addAll(songParts);
 
         Button submitButton = new Button("Submit");
-        submitButton.setOnAction(e -> saveTaggedSong(songParts));
+        submitButton.setOnAction(e -> DBStore.storeToDB(storedTab));
         box.getChildren().add(submitButton);
         return new ScrollPane(box);
     }
 
-    private static void saveTaggedSong(List<StatefulText<Duration>> buttonList) {
-        DBStore.storeToDB(buttonList);
-        //FIXME: to be implemented. for example store to db
-    }
 
     private static List<StatefulText<Duration>> createTaggableSongParts(TabMappedInput mappedInput, MediaPlayer mediaPlayer) {
         return mappedInput.getSongParts().stream()

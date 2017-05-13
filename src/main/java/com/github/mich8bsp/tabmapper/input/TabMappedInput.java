@@ -11,33 +11,54 @@ import java.util.Map;
  */
 public class TabMappedInput {
 
-    private final File audioFile;
+    private File audioFile;
     private List<String> songParts;
     private Map<String, SongSection> partNameToPart;
+    private String title;
+    private String artist;
 
-    public TabMappedInput(List<String> songParts, Map<String, SongSection> partNameToPart, File audioFile) {
+    public TabMappedInput setSectionNames(List<String> songParts){
         this.songParts = songParts;
-        this.partNameToPart = partNameToPart;
+        return this;
+    }
+
+    public TabMappedInput setSectionMapping(Map<String, SongSection> mapping){
+        this.partNameToPart = mapping;
+        return this;
+    }
+
+    public TabMappedInput setAudioFile(File audioFile){
         this.audioFile = audioFile;
+        return this;
+    }
+
+    public TabMappedInput setTitle(String title){
+        this.title = title;
+        return this;
+    }
+
+    public TabMappedInput setArtist(String artist){
+        this.artist = artist;
+        return this;
+    }
+
+    public File getAudioFile() {
+        return audioFile;
     }
 
     public List<String> getSongParts() {
         return songParts;
     }
 
-    public void setSongParts(List<String> songParts) {
-        this.songParts = songParts;
-    }
-
     public Map<String, SongSection> getPartNameToPart() {
         return partNameToPart;
     }
 
-    public void setPartNameToPart(Map<String, SongSection> partNameToPart) {
-        this.partNameToPart = partNameToPart;
+    public String getTitle() {
+        return title;
     }
 
-    public File getAudioFile() {
-        return audioFile;
+    public String getArtist() {
+        return artist;
     }
 }

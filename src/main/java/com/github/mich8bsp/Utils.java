@@ -1,5 +1,8 @@
 package com.github.mich8bsp;
 
+import com.github.mich8bsp.tabmapper.view.StatefulText;
+import io.vertx.core.json.JsonArray;
+import io.vertx.core.json.JsonObject;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -58,5 +61,16 @@ public class Utils {
         } else {
             return elapsedTimeStr;
         }
+    }
+
+    public static JsonArray toJson(List<StatefulText<Duration>> data) {
+        JsonArray sections = new JsonArray();
+        for(StatefulText<Duration> txt : data){
+            JsonObject songSection = new JsonObject();
+            songSection.put("text", txt.getInitialText());
+            songSection.put("time", txt.getState().toMillis());
+            sections.add(songSection);
+        }
+        return sections;
     }
 }
