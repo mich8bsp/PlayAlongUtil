@@ -3,6 +3,7 @@ package com.github.mich8bsp;
 import com.github.mich8bsp.tabmapper.view.StatefulText;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -72,5 +73,10 @@ public class Utils {
             sections.add(songSection);
         }
         return sections;
+    }
+
+    public static Font getDefaultFont(){
+        return Font.font("Courier New", 12);
+
     }
 }

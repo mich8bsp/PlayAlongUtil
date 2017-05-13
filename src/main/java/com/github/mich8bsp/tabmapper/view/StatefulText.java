@@ -1,5 +1,6 @@
 package com.github.mich8bsp.tabmapper.view;
 
+import com.github.mich8bsp.Utils;
 import javafx.scene.text.Text;
 
 /**
@@ -14,6 +15,7 @@ public class StatefulText<T> extends Text{
     public StatefulText(String text) {
         super(text);
         this.initialText = text;
+        setFont(Utils.getDefaultFont());
     }
 
     public T getState() {

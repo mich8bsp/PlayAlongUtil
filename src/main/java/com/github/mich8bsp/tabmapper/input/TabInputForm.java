@@ -1,5 +1,6 @@
 package com.github.mich8bsp.tabmapper.input;
 
+import com.github.mich8bsp.Utils;
 import com.github.mich8bsp.tabmapper.view.StatefulButton;
 import javafx.scene.Group;
 import javafx.scene.Parent;
@@ -28,6 +29,7 @@ public class TabInputForm {
 
         public InputField(String label, Supplier<TextInputControl> inputFieldSupplier){
             textField = inputFieldSupplier.get();
+            textField.setFont(Utils.getDefaultFont());
             getChildren().addAll(new Label(label), textField);
             setSpacing(10);
         }

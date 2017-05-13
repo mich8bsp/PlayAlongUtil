@@ -11,9 +11,9 @@ import java.util.List;
  */
 public class ChordSequence {
     //the elements are the chords and the rests between them
-    List<IMusicElement> elementsSequence = new LinkedList<>();
+    private List<IMusicElement> elementsSequence = new LinkedList<>();
 
-    public ChordSequence(List<IMusicElement> elements) {
+    private ChordSequence(List<IMusicElement> elements) {
         this.elementsSequence = elements;
     }
 
