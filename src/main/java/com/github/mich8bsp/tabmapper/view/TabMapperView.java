@@ -6,6 +6,7 @@ import com.github.mich8bsp.tabmapper.songstructure.SongSection;
 import com.github.mich8bsp.tabmapper.input.TabRawInput;
 import com.github.mich8bsp.tabmapper.input.TabMappedInput;
 import com.github.mich8bsp.tabmapper.parsing.TabMapper;
+import com.github.mich8bsp.tabmapper.storage.DBStore;
 import javafx.geometry.Point2D;
 import javafx.scene.AccessibleAttribute;
 import javafx.scene.Parent;
@@ -39,15 +40,7 @@ public class TabMapperView {
     }
 
     private static void saveTaggedSong(List<StatefulText<Duration>> buttonList) {
-        Duration lastTime = null;
-        for(StatefulText<Duration> button : buttonList){
-            if(button.getState()!=null){
-                lastTime=button.getState();
-            }else if(lastTime!=null){
-                //if some of the parts were not tagged, we auto-tag them with nearest tagged neighbour that came before
-                button.setState(lastTime);
-            }
-        }
+        DBStore.storeToDB(buttonList);
         //FIXME: to be implemented. for example store to db
     }
 
