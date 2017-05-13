@@ -70,7 +70,4 @@ public class DBStore {
         mongoClient = MongoClient.createShared(vertx, config);
     }
 
-    public static void main(String[] args) {
-        initMongoClient();
-    }
 }
