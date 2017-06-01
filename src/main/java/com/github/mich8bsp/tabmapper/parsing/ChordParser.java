@@ -29,11 +29,11 @@ public class ChordParser {
                 break;
             }
         }
-        nextChar = chordText.substring(currentCharIndex, currentCharIndex+1);
+        String restOfChord = chordText.substring(currentCharIndex, chordText.length());
         for(EChordQuality quality : EChordQuality.values()){
-            if(nextChar.equals(quality.toString())){
+            if(!quality.toString().isEmpty() && restOfChord.startsWith(quality.toString())){
                 parsedChord.setQuality(quality);
-                currentCharIndex++;
+                currentCharIndex += quality.toString().length();
                 if(currentCharIndex>=chordText.length()){
                     return parsedChord;
                 }
@@ -41,6 +41,7 @@ public class ChordParser {
             }
         }
         try{
+            nextChar = chordText.substring(currentCharIndex, currentCharIndex+1);
             int interval = Integer.parseInt(nextChar);
             parsedChord.setInterval(interval);
         }catch (Exception e){

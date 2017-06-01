@@ -21,7 +21,7 @@ public class MediaControl extends BorderPane {
 
     private MediaPlayer mp;
 
-    private Duration duration;
+    private Duration duration = Duration.UNKNOWN;
     private Slider timeSlider;
     private Label timeLabel;
     private Slider volumeSlider;

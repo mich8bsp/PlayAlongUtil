@@ -5,7 +5,7 @@ package com.github.mich8bsp.tabmapper.songstructure;
  */
 public enum EChordQuality {
     //MAJOR_IMPL is the implied major, for example the chord G7 is actually GM7
-    MAJOR_IMPL(""), MAJOR("M"), MINOR("m"), AUGMENTED("aug"), DIMINISHED("dim");
+    MAJOR_IMPL(""), MAJOR_EXPL("maj"), MAJOR("M"), MINOR("m"), AUGMENTED("aug"), DIMINISHED("dim");
 
     private final String stringRepr;
 

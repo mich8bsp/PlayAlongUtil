@@ -1,23 +1,16 @@
 package com.github.mich8bsp.tabmapper.storage;
 
+import com.github.mich8bsp.db.DBConn;
+import com.github.mich8bsp.db.DBStoredTab;
 import com.github.mich8bsp.tabmapper.view.StatefulText;
-import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.mongo.MongoClient;
 import javafx.util.Duration;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 /**
  * Created by mich8 on 13-May-17.
  */
 public class DBStore {
-
-    private static Vertx vertx = Vertx.vertx();
-    private static MongoClient mongoClient;
 
     private static void preprocessData(List<StatefulText<Duration>> mappedData){
         Duration lastTime = null;
@@ -40,10 +33,8 @@ public class DBStore {
 
     public static void storeToDB(DBStoredTab storedTab){
         preprocessData(storedTab.getMappedSections());
-        if(mongoClient==null){
-            initMongoClient();
-        }
-        mongoClient.insert("guitar-tabs", storedTab.toJson(), res->{
+
+        DBConn.getDBClient().insert(DBConn.COLLECTION_NAME, storedTab.toJson(), res->{
             if(res.failed()){
                 System.out.println("Submit failed with cause " + res.cause().getMessage());
             }else{
@@ -53,21 +44,6 @@ public class DBStore {
 
     }
 
-    private static void initMongoClient() {
-        JsonObject config = new JsonObject();
-        config.put("dbHost", "localhost");
-        config.put("port", 27017);
-        config.put("username", "guest");
-        config.put("password", "guest");
-        config.put("dbName", "test");
-        try {
-            String configJson = new String(Files.readAllBytes(Paths.get("src/main/resources/login.conf")));
-            config = new JsonObject(configJson);
-        } catch (IOException e) {
-            System.out.println("Specify db information in login.conf file in resources folder");
-        }
 
-        mongoClient = MongoClient.createShared(vertx, config);
-    }
 
 }

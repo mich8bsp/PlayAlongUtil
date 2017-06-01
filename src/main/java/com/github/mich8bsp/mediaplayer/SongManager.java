@@ -1,39 +1,43 @@
 package com.github.mich8bsp.mediaplayer;
 
-import com.github.mich8bsp.Utils;
+import io.vertx.core.json.JsonObject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Parent;
 import javafx.scene.control.ListView;
 
-import java.io.File;
-import java.nio.file.Path;
-import java.util.*;
-import java.util.stream.IntStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 /**
  * Created by mich8 on 07-Oct-16.
  */
-public class SongManager implements ISongEvents, ISongControls {
+public class SongManager implements ISongEvents {
 
-    private final IViewUpdater viewUpdater;
+    private final Consumer<Parent> viewUpdater;
     private int nextSongIndex = 0;
     private int currentSongIndex = 0;
     private boolean toShuffle = false;
     private List<SongBundle> allSongBundles = new ArrayList<>();
     private ObservableList<String> songNamesList;
 
-    public SongManager(IViewUpdater viewUpdater){
+    private AtomicBoolean isInitialized = new AtomicBoolean(false);
+
+    public SongManager(Consumer<Parent> viewUpdater){
         this.viewUpdater = viewUpdater;
     }
 
-    public void init(File dir) {
-        List<Path> tabFiles = new LinkedList<>();
-        Utils.findTabFiles(dir.toPath(), tabFiles);
-        songNamesList = getSongNames(tabFiles);
-        tabFiles.forEach(tab -> allSongBundles.add(new SongBundle(tab, this)));
+    public void init(List<JsonObject> result) {
+        songNamesList = FXCollections.observableArrayList();
+        result.stream()
+                .map(x->x.getString("artist") + " - " + x.getString("title"))
+                .forEach(x->songNamesList.add(x));
+
+        result.forEach(tab -> allSongBundles.add(new SongBundle(tab, this)));
+        isInitialized.set(true);
     }
-
-
 
     public void setToShuffle(boolean toShuffle) {
         this.toShuffle = toShuffle;
@@ -53,12 +57,6 @@ public class SongManager implements ISongEvents, ISongControls {
         } else {
             nextSongIndex = (currentSongIndex + 1) % allSongBundles.size();
         }
-    }
-
-    public ObservableList<String> getSongNames(List<Path> tabFiles) {
-        ObservableList<String> songNames = FXCollections.observableArrayList();
-        IntStream.range(0, tabFiles.size()).forEach(songIndex -> songNames.add(songIndex, SongBundle.resolveSongName(tabFiles.get(songIndex))));
-        return songNames;
     }
 
     public ListView<String> getSongsList() {
@@ -104,7 +102,7 @@ public class SongManager implements ISongEvents, ISongControls {
      */
     public void changeSong(SongBundle song) {
         MediaControl nextSongControl = song.getMediaControl();
-        viewUpdater.updateView(nextSongControl);
+        viewUpdater.accept(nextSongControl);
         song.getMediaPlayer().currentTimeProperty().addListener(ov -> nextSongControl.updateValues());
         song.getMediaPlayer().play();
     }
@@ -119,5 +117,9 @@ public class SongManager implements ISongEvents, ISongControls {
     @Override
     public boolean isShuffleOn() {
         return toShuffle;
+    }
+
+    public boolean getIsInitialized() {
+        return isInitialized.get();
     }
 }

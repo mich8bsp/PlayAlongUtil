@@ -9,26 +9,26 @@ import javafx.scene.layout.HBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 
+import java.util.List;
+
 /**
  * Created by mich8 on 06-May-17.
  */
 public class TabMediaControl extends MediaControl {
     private final SongStructure tabStructure;
     private SongStructure lyricsStructure;
-    private ISongControls songControls;
+    private ISongEvents songControls;
     private TextArea tabTextArea;
     private TextArea lyricsTextArea;
-    private ISongEvents songEventObserver;
     private ToggleButton shuffleButton;
 
-    public TabMediaControl(MediaPlayer mp, SongStructure tabStructure, SongStructure lyricsStructure, SongManager songManager) {
+    public TabMediaControl(MediaPlayer mp, SongStructure tabStructure, SongStructure lyricsStructure,
+                           ISongEvents songManager, ListView songListView) {
         super(mp);
         this.tabStructure = tabStructure;
         this.lyricsStructure = lyricsStructure;
         this.songControls = songManager;
-        buildView(songManager.getSongsList());
-
-        setEventObserver(songManager);
+        buildView(songListView);
     }
 
     @Override
@@ -55,14 +55,10 @@ public class TabMediaControl extends MediaControl {
         setCenter(mvPane);
     }
 
-    public void setEventObserver(ISongEvents observer) {
-        songEventObserver = observer;
-    }
-
     protected void skipToNext() {
        super.stop();
-        if (songEventObserver != null) {
-            songEventObserver.onSongChange();
+        if (songControls != null) {
+            songControls.onSongChange();
         }
     }
 

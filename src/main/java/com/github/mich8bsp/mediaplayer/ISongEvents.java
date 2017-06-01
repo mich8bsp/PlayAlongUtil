@@ -9,4 +9,8 @@ public interface ISongEvents {
 
     void changeSong(SongBundle song);
 
+    void onShuffleChanged();
+
+    boolean isShuffleOn();
+
 }

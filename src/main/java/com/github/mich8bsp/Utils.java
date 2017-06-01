@@ -6,32 +6,12 @@ import io.vertx.core.json.JsonObject;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
-import java.io.IOException;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
 /**
  * Created by mich8 on 12-Oct-16.
  */
 public class Utils {
-
-    public static void findTabFiles(Path dir, List<Path> tabFiles) {
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
-            for (Path entry : stream) {
-                if (Files.isDirectory(entry)) {
-                    findTabFiles(entry, tabFiles);
-                } else {
-                    if (entry.getFileName().toString().endsWith("tabs")) {
-                        tabFiles.add(entry);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static String getSongUrl(String filePath) {
         return "file:///" + filePath.replace("\\", "/").replaceAll(" ", "%20");
@@ -79,4 +59,5 @@ public class Utils {
         return Font.font("Courier New", 12);
 
     }
+
 }

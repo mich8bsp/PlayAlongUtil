@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
  */
 public class TabMapper {
 
+    private static int globalCounter = 0;
+
     //Test
     public static void main(String[] args) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get("res"+ File.separator+ "test-tab"));
@@ -52,6 +54,9 @@ public class TabMapper {
             if(isSongPartName(line)){
                 String currentPartName = line.substring(line.indexOf('[')+1, line.lastIndexOf(']'));
 
+                if(sectionNameToSection.get(currentPartName)!=null){
+                    currentPartName += ++globalCounter;
+                }
                 songSectionNames.add(currentPartName);
 
                 currentPart = new SongSection();
@@ -61,8 +66,10 @@ public class TabMapper {
                 sectionNameToSection.put(currentPartName, currentPart);
                 continue;
             }
-            ChordSequence chordSequence = ChordSequence.buildChordSequence(line);
-
+            ChordSequence chordSequence = null;
+            if(!isTabLine(line)) {
+                chordSequence = ChordSequence.buildChordSequence(line);
+            }
             if (chordSequence != null) {
                 if(currentTabSegment.getChords()!=null){
                     //there can be no two chord sequences in a single segment, so we split
@@ -74,6 +81,9 @@ public class TabMapper {
             }
 
             if(isTabLine(line)){
+                if(currentTabSegment.getTabs()==null){
+                    currentTabSegment.setTabs(new LinkedList<>());
+                }
                 currentTabSegment.getTabs().add(line);
                 continue;
             }

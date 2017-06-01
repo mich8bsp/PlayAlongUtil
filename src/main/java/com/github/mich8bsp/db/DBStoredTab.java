@@ -1,4 +1,4 @@
-package com.github.mich8bsp.tabmapper.storage;
+package com.github.mich8bsp.db;
 
 import com.github.mich8bsp.Utils;
 import com.github.mich8bsp.tabmapper.input.TabMappedInput;
@@ -13,10 +13,9 @@ import java.util.List;
  */
 public class DBStoredTab {
 
-
-    private final String songPath;
-    private final String title;
-    private final String artist;
+    private String songPath;
+    private String title;
+    private String artist;
     private List<StatefulText<Duration>> mappedSections;
 
     public DBStoredTab(TabMappedInput mappedInput, List<StatefulText<Duration>> songParts) {
@@ -26,24 +25,8 @@ public class DBStoredTab {
         this.mappedSections = songParts;
     }
 
-    public String getSongPath() {
-        return songPath;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getArtist() {
-        return artist;
-    }
-
     public List<StatefulText<Duration>> getMappedSections() {
         return mappedSections;
-    }
-
-    public void setMappedSections(List<StatefulText<Duration>> mappedSections) {
-        this.mappedSections = mappedSections;
     }
 
     public JsonObject toJson() {
@@ -54,4 +37,5 @@ public class DBStoredTab {
         mappedJson.put("sections", Utils.toJson(mappedSections));
         return mappedJson;
     }
+
 }

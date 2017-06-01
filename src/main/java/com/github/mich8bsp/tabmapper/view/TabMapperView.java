@@ -7,7 +7,7 @@ import com.github.mich8bsp.tabmapper.input.TabRawInput;
 import com.github.mich8bsp.tabmapper.input.TabMappedInput;
 import com.github.mich8bsp.tabmapper.parsing.TabMapper;
 import com.github.mich8bsp.tabmapper.storage.DBStore;
-import com.github.mich8bsp.tabmapper.storage.DBStoredTab;
+import com.github.mich8bsp.db.DBStoredTab;
 import javafx.geometry.Point2D;
 import javafx.scene.AccessibleAttribute;
 import javafx.scene.Parent;
