@@ -11,7 +11,11 @@ import java.util.stream.Collectors;
  * Song section represents parts of the songs such as Intro, Verse, Chorus, Solo etc...
  */
 public class SongSection {
+
     private List<TabSegment> segments = new LinkedList<>();
+
+
+    private SongSection referencedSection;
 
     public void addSegment(TabSegment segment) {
         segments.add(segment);
@@ -29,4 +33,18 @@ public class SongSection {
                 .map(TabSegment::isEmpty)
                 .reduce(true, (x,y)->x&&y);
     }
+
+    public void setReferencedSection(SongSection referencedSection) {
+        this.referencedSection = referencedSection;
+    }
+
+
+    public SongSection getReferencedSection() {
+        return referencedSection;
+    }
+
+    public List<TabSegment> getSegments() {
+        return segments;
+    }
+
 }

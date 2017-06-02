@@ -3,6 +3,7 @@ package com.github.mich8bsp.tabmapper.storage;
 import com.github.mich8bsp.db.DBConn;
 import com.github.mich8bsp.db.DBStoredTab;
 import com.github.mich8bsp.tabmapper.view.StatefulText;
+import io.vertx.core.json.JsonObject;
 import javafx.util.Duration;
 
 import java.util.List;
@@ -33,8 +34,9 @@ public class DBStore {
 
     public static void storeToDB(DBStoredTab storedTab){
         preprocessData(storedTab.getMappedSections());
-
-        DBConn.getDBClient().insert(DBConn.COLLECTION_NAME, storedTab.toJson(), res->{
+        JsonObject json = storedTab.toJson();
+        json.put("_id", json.getString("artist")+"-" +json.getString("title"));
+        DBConn.getDBClient().insert(DBConn.COLLECTION_NAME, json, res->{
             if(res.failed()){
                 System.out.println("Submit failed with cause " + res.cause().getMessage());
             }else{
