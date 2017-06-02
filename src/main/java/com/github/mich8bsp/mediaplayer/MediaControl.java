@@ -1,10 +1,12 @@
 package com.github.mich8bsp.mediaplayer;
 
-import com.github.mich8bsp.*;
+import com.github.mich8bsp.Utils;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -27,7 +29,7 @@ public class MediaControl extends BorderPane {
     private Slider volumeSlider;
     private HBox mediaBar;
 
-    public static MediaControl buildMediaControl(String audioFile){
+    public static MediaControl buildMediaControl(String audioFile) {
         MediaPlayer mediaPlayer = new MediaPlayer(new Media(audioFile));
         mediaPlayer.setAutoPlay(false);
 
@@ -39,7 +41,7 @@ public class MediaControl extends BorderPane {
         buildControls();
     }
 
-    public MediaPlayer getMediaPlayer(){
+    public MediaPlayer getMediaPlayer() {
         return mp;
     }
 
@@ -63,7 +65,6 @@ public class MediaControl extends BorderPane {
         ImageView pauseButtonImg = new ImageView(new Image("pause-button.png"));
         pauseButtonImg.setFitHeight(20);
         pauseButtonImg.setFitWidth(20);
-
 
 
         playButton.setOnAction(e -> {
@@ -118,7 +119,7 @@ public class MediaControl extends BorderPane {
         updateValues();
     }
 
-    protected void addAdditionalToMediaBar(HBox mediaBar){
+    protected void addAdditionalToMediaBar(HBox mediaBar) {
 
     }
 

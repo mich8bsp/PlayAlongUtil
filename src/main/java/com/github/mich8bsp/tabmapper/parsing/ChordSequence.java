@@ -21,7 +21,7 @@ public class ChordSequence {
         return elementsSequence;
     }
 
-    private static class Rest implements IMusicElement{
+    private static class Rest implements IMusicElement {
 
         @Override
         public String toString() {
@@ -29,16 +29,16 @@ public class ChordSequence {
         }
     }
 
-    public static ChordSequence buildChordSequence(String text){
+    public static ChordSequence buildChordSequence(String text) {
         List<IMusicElement> elements = new LinkedList<>();
-        for(String element : text.split(" ")){
-            if(element.isEmpty()){
+        for (String element : text.split(" ")) {
+            if (element.isEmpty()) {
                 elements.add(new Rest());
-            }else{
-                try{
+            } else {
+                try {
                     Chord chord = ChordParser.parseChord(element);
                     elements.add(chord);
-                }catch (Exception e){
+                } catch (Exception e) {
                     return null;
                 }
             }

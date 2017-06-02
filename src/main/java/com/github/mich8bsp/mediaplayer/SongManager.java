@@ -1,5 +1,6 @@
 package com.github.mich8bsp.mediaplayer;
 
+import com.github.mich8bsp.Utils;
 import io.vertx.core.json.JsonObject;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,15 +26,15 @@ public class SongManager implements ISongEvents {
 
     private AtomicBoolean isInitialized = new AtomicBoolean(false);
 
-    public SongManager(Consumer<Parent> viewUpdater){
+    public SongManager(Consumer<Parent> viewUpdater) {
         this.viewUpdater = viewUpdater;
     }
 
     public void init(List<JsonObject> result) {
         songNamesList = FXCollections.observableArrayList();
         result.stream()
-                .map(x->x.getString("artist") + " - " + x.getString("title"))
-                .forEach(x->songNamesList.add(x));
+                .map(Utils::getFullTitle)
+                .forEach(x -> songNamesList.add(x));
 
         result.forEach(tab -> allSongBundles.add(new SongBundle(tab, this)));
         isInitialized.set(true);
@@ -70,7 +71,7 @@ public class SongManager implements ISongEvents {
                         SongBundle newSong = allSongBundles.get(i);
                         //we find the new song in all the bundles and switch songs
                         if (newSong.getSongName().equals(new_val)) {
-                            if(!newSong.getSongName().equals(oldSong.getSongName())) {
+                            if (!newSong.getSongName().equals(oldSong.getSongName())) {
                                 //stop the old song
                                 oldSong.getMediaPlayer().stop();
                                 //update current and next song indexes
@@ -87,8 +88,8 @@ public class SongManager implements ISongEvents {
         return songListView;
     }
 
-    /** Find next song to play (consecutive or random), and change to that song
-     *
+    /**
+     * Find next song to play (consecutive or random), and change to that song
      */
     @Override
     public void onSongChange() {
@@ -96,7 +97,8 @@ public class SongManager implements ISongEvents {
         changeSong(nextSong);
     }
 
-    /** change to specific song
+    /**
+     * change to specific song
      *
      * @param song
      */

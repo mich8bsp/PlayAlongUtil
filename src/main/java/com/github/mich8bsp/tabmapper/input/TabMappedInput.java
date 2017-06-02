@@ -17,27 +17,27 @@ public class TabMappedInput {
     private String title;
     private String artist;
 
-    public TabMappedInput setSectionNames(List<String> songParts){
+    public TabMappedInput setSectionNames(List<String> songParts) {
         this.songParts = songParts;
         return this;
     }
 
-    public TabMappedInput setSectionMapping(Map<String, SongSection> mapping){
+    public TabMappedInput setSectionMapping(Map<String, SongSection> mapping) {
         this.partNameToPart = mapping;
         return this;
     }
 
-    public TabMappedInput setAudioFile(File audioFile){
+    public TabMappedInput setAudioFile(File audioFile) {
         this.audioFile = audioFile;
         return this;
     }
 
-    public TabMappedInput setTitle(String title){
+    public TabMappedInput setTitle(String title) {
         this.title = title;
         return this;
     }
 
-    public TabMappedInput setArtist(String artist){
+    public TabMappedInput setArtist(String artist) {
         this.artist = artist;
         return this;
     }

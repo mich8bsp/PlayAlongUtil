@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 /**
  * Created by mich8 on 12-May-17.
- *
+ * <p>
  * Song section represents parts of the songs such as Intro, Verse, Chorus, Solo etc...
  */
 public class SongSection {
@@ -31,7 +31,7 @@ public class SongSection {
     public boolean isEmpty() {
         return segments.isEmpty() || segments.stream()
                 .map(TabSegment::isEmpty)
-                .reduce(true, (x,y)->x&&y);
+                .reduce(true, (x, y) -> x && y);
     }
 
     public void setReferencedSection(SongSection referencedSection) {

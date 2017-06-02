@@ -20,7 +20,7 @@ public class DBConn {
 
 
     public static MongoClient getDBClient() {
-        if(mongoClient!=null){
+        if (mongoClient != null) {
             return mongoClient;
         }
         JsonObject config = new JsonObject();

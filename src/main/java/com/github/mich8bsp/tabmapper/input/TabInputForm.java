@@ -19,28 +19,28 @@ import java.util.function.Supplier;
  */
 public class TabInputForm {
 
-    public static class InputField extends HBox{
+    public static class InputField extends HBox {
 
         private TextInputControl textField;
 
-        public InputField(String label){
+        public InputField(String label) {
             this(label, TextField::new);
         }
 
-        public InputField(String label, Supplier<TextInputControl> inputFieldSupplier){
+        public InputField(String label, Supplier<TextInputControl> inputFieldSupplier) {
             textField = inputFieldSupplier.get();
             textField.setFont(Utils.getDefaultFont());
             getChildren().addAll(new Label(label), textField);
             setSpacing(10);
         }
 
-        public String getInputText(){
+        public String getInputText() {
             return textField.getText();
         }
 
     }
 
-    public static Parent getInputForm(Consumer<TabRawInput> onSubmit){
+    public static Parent getInputForm(Consumer<TabRawInput> onSubmit) {
 
         InputField title = new InputField("Title:");
         InputField artist = new InputField("Artist:");
@@ -64,24 +64,24 @@ public class TabInputForm {
 
         Label errors = new Label();
 
-        submit.setOnAction(event->{
+        submit.setOnAction(event -> {
             String inputTitle = title.getInputText();
             String inputArtist = artist.getInputText();
             String inputTab = tab.getInputText();
             errors.setText("");
-            if(inputTitle.isEmpty()){
+            if (inputTitle.isEmpty()) {
                 errors.setText(errors.getText() + "Missing title field\n");
             }
-            if(inputArtist.isEmpty()){
+            if (inputArtist.isEmpty()) {
                 errors.setText(errors.getText() + "Missing artist field\n");
             }
-            if(inputTab.isEmpty()){
+            if (inputTab.isEmpty()) {
                 errors.setText(errors.getText() + "Missing tabs\n");
             }
-            if(audioSelectButton.getState()==null){
+            if (audioSelectButton.getState() == null) {
                 errors.setText(errors.getText() + "Missing audio file\n");
             }
-            if(!errors.getText().isEmpty()){
+            if (!errors.getText().isEmpty()) {
                 return;
             }
             TabRawInput tabInputForm = new TabRawInput(inputTitle, inputArtist, inputTab, audioSelectButton.getState());

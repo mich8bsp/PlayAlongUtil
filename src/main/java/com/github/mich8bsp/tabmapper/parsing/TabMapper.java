@@ -5,12 +5,7 @@ import com.github.mich8bsp.tabmapper.input.TabRawInput;
 import com.github.mich8bsp.tabmapper.songstructure.SongSection;
 import com.github.mich8bsp.tabmapper.songstructure.TabSegment;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by mich8 on 06-May-17.

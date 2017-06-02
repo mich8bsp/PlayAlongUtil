@@ -1,13 +1,13 @@
 package com.github.mich8bsp.tabmapper.view;
 
 import com.github.mich8bsp.Utils;
-import com.github.mich8bsp.mediaplayer.MediaControl;
-import com.github.mich8bsp.tabmapper.songstructure.SongSection;
-import com.github.mich8bsp.tabmapper.input.TabRawInput;
-import com.github.mich8bsp.tabmapper.input.TabMappedInput;
-import com.github.mich8bsp.tabmapper.parsing.TabMapper;
-import com.github.mich8bsp.tabmapper.storage.DBStore;
 import com.github.mich8bsp.db.DBStoredTab;
+import com.github.mich8bsp.mediaplayer.MediaControl;
+import com.github.mich8bsp.tabmapper.input.TabMappedInput;
+import com.github.mich8bsp.tabmapper.input.TabRawInput;
+import com.github.mich8bsp.tabmapper.parsing.TabMapper;
+import com.github.mich8bsp.tabmapper.songstructure.SongSection;
+import com.github.mich8bsp.tabmapper.storage.DBStore;
 import javafx.geometry.Point2D;
 import javafx.scene.AccessibleAttribute;
 import javafx.scene.Parent;
@@ -62,12 +62,12 @@ public class TabMapperView {
         StatefulText<Duration> clickableText = new StatefulText<>(text);
 
         clickableText.setOnMouseClicked(e -> {
-            if(e.isControlDown()) {
+            if (e.isControlDown()) {
                 int index = (int) clickableText.queryAccessibleAttribute(AccessibleAttribute.OFFSET_AT_POINT,
                         new Point2D(e.getScreenX(), e.getScreenY()));
                 System.out.println(index);
                 //FIXME: implement dynamic splitting here
-            }else{
+            } else {
                 Duration currentTimeTagged = mediaPlayer.getCurrentTime();
                 clickableText.setState(currentTimeTagged);
                 //we use initialText here instead of text because button can be tagged multiple times

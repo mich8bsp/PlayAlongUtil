@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 /**
  * Created by mich8 on 12-May-17.
- *
+ * <p>
  * Tab Segment represents a single line of music ( a single line of lyrics, its chords and its tabs)
  * Although musically it represents a single line, the segment itself consists of several lines of text
  */

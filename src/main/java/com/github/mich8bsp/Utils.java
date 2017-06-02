@@ -17,7 +17,7 @@ public class Utils {
         return "file:///" + filePath.replace("\\", "/").replaceAll(" ", "%20");
     }
 
-    public static String formatTime(Duration time){
+    public static String formatTime(Duration time) {
         int roundedSeconds = (int) time.toSeconds();
         int hours = roundedSeconds / (60 * 60);
         if (hours > 0) {
@@ -26,9 +26,9 @@ public class Utils {
         int minutes = roundedSeconds / 60;
         int seconds = roundedSeconds - hours * 60 * 60
                 - minutes * 60;
-        if(hours>0) {
+        if (hours > 0) {
             return String.format("%d:%02d:%02d", hours, minutes, seconds);
-        }else{
+        } else {
             return String.format("%02d:%02d", minutes, seconds);
         }
     }
@@ -46,7 +46,7 @@ public class Utils {
 
     public static JsonArray toJson(List<StatefulText<Duration>> data) {
         JsonArray sections = new JsonArray();
-        for(StatefulText<Duration> txt : data){
+        for (StatefulText<Duration> txt : data) {
             JsonObject songSection = new JsonObject();
             songSection.put("text", txt.getInitialText());
             songSection.put("time", txt.getState().toMillis());
@@ -55,9 +55,12 @@ public class Utils {
         return sections;
     }
 
-    public static Font getDefaultFont(){
+    public static Font getDefaultFont() {
         return Font.font("Courier New", 12);
 
     }
 
+    public static String getFullTitle(JsonObject songJson) {
+        return songJson.getString("artist") + " - " + songJson.getString("title");
+    }
 }

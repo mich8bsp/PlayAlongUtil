@@ -15,7 +15,7 @@ public class SongBundle {
     private String songName;
 
     public SongBundle(JsonObject tab, SongManager songManager) {
-        this.songName = tab.getString("artist") + " - " + tab.getString("title");
+        this.songName = Utils.getFullTitle(tab);
         String songURL = Utils.getSongUrl(tab.getString("songPath"));
         Media songMedia = new Media(songURL);
         mediaPlayer = new MediaPlayer(songMedia);

@@ -6,7 +6,7 @@ import javafx.scene.text.Text;
 /**
  * Created by mich8 on 11-May-17.
  */
-public class StatefulText<T> extends Text{
+public class StatefulText<T> extends Text {
     private T state;
 
     //because we change the text of this button by prepending the state, we want to store the original text
@@ -30,7 +30,7 @@ public class StatefulText<T> extends Text{
         return initialText;
     }
 
-    public void setInitialText(String initialText){
+    public void setInitialText(String initialText) {
         this.initialText = initialText;
     }
 }

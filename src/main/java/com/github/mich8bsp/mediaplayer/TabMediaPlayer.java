@@ -7,6 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 /**
  * Created by mich8 on 07-Oct-16.
  */
@@ -23,14 +24,14 @@ public class TabMediaPlayer extends Application {
         songManager = new SongManager(this::updateView);
 
         DBConn.getDBClient().find(DBConn.COLLECTION_NAME, new JsonObject(), res -> {
-            if(res.succeeded()){
+            if (res.succeeded()) {
                 songManager.init(res.result());
-            }else{
+            } else {
                 System.out.println("Failed to read tabs from db " + res.cause());
             }
         });
 
-        while(!songManager.getIsInitialized()){
+        while (!songManager.getIsInitialized()) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {

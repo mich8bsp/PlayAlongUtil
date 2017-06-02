@@ -10,33 +10,35 @@ public class Chord implements IMusicElement {
     private int interval = 0;
     private Note altBass;
 
-    public Chord(Note chordRoot){
+    public Chord(Note chordRoot) {
         this.chordRoot = chordRoot;
     }
 
-    public Chord setQuality(EChordQuality quality){
-        this.quality =quality;
+    public Chord setQuality(EChordQuality quality) {
+        this.quality = quality;
         return this;
     }
 
-    public Chord setInterval(int interval){
+    public Chord setInterval(int interval) {
         this.interval = interval;
         return this;
     }
 
-    public Chord setAltBass(Note altBass){
+    public Chord setAltBass(Note altBass) {
         this.altBass = altBass;
         return this;
     }
+
     public Chord setChordRoot(Note chordRoot) {
         this.chordRoot = chordRoot;
         return this;
     }
+
     @Override
     public String toString() {
         return chordRoot.toString()
-                + quality + ((interval>0) ? interval : "")
-                + (altBass!=null ? "/" + altBass : "");
+                + quality + ((interval > 0) ? interval : "")
+                + (altBass != null ? "/" + altBass : "");
     }
 
 

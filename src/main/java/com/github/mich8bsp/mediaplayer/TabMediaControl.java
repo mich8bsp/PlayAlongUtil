@@ -11,8 +11,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 
-import java.util.List;
-
 /**
  * Created by mich8 on 06-May-17.
  */
@@ -58,7 +56,7 @@ public class TabMediaControl extends MediaControl {
     }
 
     protected void skipToNext() {
-       super.stop();
+        super.stop();
         if (songControls != null) {
             songControls.onSongChange();
         }
@@ -66,7 +64,7 @@ public class TabMediaControl extends MediaControl {
 
 
     @Override
-    protected void addAdditionalToMediaBar(HBox mediaBar){
+    protected void addAdditionalToMediaBar(HBox mediaBar) {
         ImageView skipButtonImg = new ImageView(new Image("skip-button.png"));
         skipButtonImg.setFitHeight(20);
         skipButtonImg.setFitWidth(20);
@@ -81,7 +79,7 @@ public class TabMediaControl extends MediaControl {
         shuffleButtonImg.setFitWidth(20);
         shuffleButton = new ToggleButton("", shuffleButtonImg);
 
-        shuffleButton.setOnAction(event->{
+        shuffleButton.setOnAction(event -> {
             songControls.onShuffleChanged();
             shuffleButton.setSelected(songControls.isShuffleOn());
         });
@@ -89,13 +87,13 @@ public class TabMediaControl extends MediaControl {
     }
 
     @Override
-    public void updateValues(){
+    public void updateValues() {
         shuffleButton.setSelected(songControls.isShuffleOn());
         super.updateValues();
     }
 
     @Override
-    public void updateAdditionalValues(double currentTime){
+    public void updateAdditionalValues(double currentTime) {
         tabTextArea.setText(tabStructure.getCurrentPart(currentTime));
         if (lyricsStructure != null) {
             lyricsTextArea.setText(lyricsStructure.getCurrentPart(currentTime));
