@@ -19,15 +19,6 @@ public class TabMapper {
 
     private static int globalCounter = 0;
 
-    //Test
-    public static void main(String[] args) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get("res" + File.separator + "test-tab"));
-        String tab = lines.stream().collect(Collectors.joining("\n"));
-        TabRawInput rawInput = new TabRawInput("songysong", "artyart", tab, null);
-        parseTab(rawInput);
-    }
-
-
     public static TabMappedInput parseTab(TabRawInput tab) {
         List<String> tabLines = Arrays.asList(tab.getTab().split("\n"));
 

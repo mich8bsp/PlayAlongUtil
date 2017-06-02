@@ -4,6 +4,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.media.MediaPlayer;
@@ -65,13 +67,19 @@ public class TabMediaControl extends MediaControl {
 
     @Override
     protected void addAdditionalToMediaBar(HBox mediaBar){
-        Button skipButton = new Button(">>");
+        ImageView skipButtonImg = new ImageView(new Image("skip-button.png"));
+        skipButtonImg.setFitHeight(20);
+        skipButtonImg.setFitWidth(20);
+
+        Button skipButton = new Button("", skipButtonImg);
         skipButton.setOnAction(event -> skipToNext());
 
         mediaBar.getChildren().add(skipButton);
 
-
-        shuffleButton = new ToggleButton("RND");
+        ImageView shuffleButtonImg = new ImageView(new Image("shuffle-button.png"));
+        shuffleButtonImg.setFitHeight(20);
+        shuffleButtonImg.setFitWidth(20);
+        shuffleButton = new ToggleButton("", shuffleButtonImg);
 
         shuffleButton.setOnAction(event->{
             songControls.onShuffleChanged();
