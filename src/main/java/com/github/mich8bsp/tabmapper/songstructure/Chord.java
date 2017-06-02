@@ -5,18 +5,13 @@ package com.github.mich8bsp.tabmapper.songstructure;
  */
 public class Chord implements IMusicElement {
 
-    private EChordRoot root;
-    private EChordIntonation intonation = EChordIntonation.NONE;
+    private Note chordRoot;
     private EChordQuality quality = EChordQuality.MAJOR_IMPL;
-    int interval = 0;
+    private int interval = 0;
+    private Note altBass;
 
-    public Chord(EChordRoot root){
-        this.root = root;
-    }
-
-    public Chord setIntonation(EChordIntonation intonation){
-        this.intonation = intonation;
-        return this;
+    public Chord(Note chordRoot){
+        this.chordRoot = chordRoot;
     }
 
     public Chord setQuality(EChordQuality quality){
@@ -29,8 +24,20 @@ public class Chord implements IMusicElement {
         return this;
     }
 
+    public Chord setAltBass(Note altBass){
+        this.altBass = altBass;
+        return this;
+    }
+    public Chord setChordRoot(Note chordRoot) {
+        this.chordRoot = chordRoot;
+        return this;
+    }
     @Override
     public String toString() {
-        return root.name() + intonation + quality + ((interval>0) ? interval : "");
+        return chordRoot.toString()
+                + quality + ((interval>0) ? interval : "")
+                + (altBass!=null ? "/" + altBass : "");
     }
+
+
 }
