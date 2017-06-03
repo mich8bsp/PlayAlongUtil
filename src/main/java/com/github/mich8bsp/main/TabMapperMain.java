@@ -1,4 +1,4 @@
-package com.github.mich8bsp.tabmapper;
+package com.github.mich8bsp.main;
 
 import com.github.mich8bsp.tabmapper.input.TabInputForm;
 import com.github.mich8bsp.tabmapper.input.TabRawInput;

@@ -37,7 +37,7 @@ public class DBStore {
         preprocessData(storedTab.getMappedSections());
         JsonObject json = storedTab.toJson();
         json.put("_id", Utils.getFullTitle(json));
-        DBConn.getDBClient().insert(DBConn.COLLECTION_NAME, json, res -> {
+        DBConn.getDBClient().save(DBConn.COLLECTION_NAME, json, res -> {
             if (res.failed()) {
                 System.out.println("Submit failed with cause " + res.cause().getMessage());
             } else {

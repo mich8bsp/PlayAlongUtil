@@ -1,6 +1,7 @@
-package com.github.mich8bsp.mediaplayer;
+package com.github.mich8bsp.main;
 
 import com.github.mich8bsp.db.DBConn;
+import com.github.mich8bsp.mediaplayer.SongManager;
 import io.vertx.core.json.JsonObject;
 import javafx.application.Application;
 import javafx.scene.Group;
@@ -21,7 +22,7 @@ public class TabMediaPlayer extends Application {
 
         primaryStage.setTitle("Tab Music Player");
 
-        songManager = new SongManager(this::updateView);
+        songManager = new SongManager(root -> scene.setRoot(root));
 
         DBConn.getDBClient().find(DBConn.COLLECTION_NAME, new JsonObject(), res -> {
             if (res.succeeded()) {
@@ -54,7 +55,4 @@ public class TabMediaPlayer extends Application {
         launch(args);
     }
 
-    private void updateView(Parent root) {
-        scene.setRoot(root);
-    }
 }
