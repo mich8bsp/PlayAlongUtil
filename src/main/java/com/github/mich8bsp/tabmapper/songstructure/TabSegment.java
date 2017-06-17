@@ -16,6 +16,7 @@ public class TabSegment {
     private String lyrics;
     private List<String> tabs;
     private ChordSequence chords;
+    private List<String> rawText;
 
     public String getLyrics() {
         return lyrics;
@@ -41,7 +42,18 @@ public class TabSegment {
         this.chords = chords;
     }
 
+    public void addRawTextLine(String line){
+        if(rawText==null){
+            rawText = new LinkedList<>();
+        }
+        rawText.add(line);
+    }
+
     public List<String> getLines() {
+        //if we opted not to parse the tabs semantically - return the raw text
+        if(rawText!=null){
+            return rawText;
+        }
         List<String> lines = new LinkedList<>();
         if (chords != null) {
             String chordsLine = chords.getElements()
@@ -60,6 +72,6 @@ public class TabSegment {
     }
 
     public boolean isEmpty() {
-        return chords == null && tabs == null && lyrics == null;
+        return chords == null && tabs == null && lyrics == null && rawText == null;
     }
 }

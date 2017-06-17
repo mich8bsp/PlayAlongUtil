@@ -12,6 +12,7 @@ import java.util.*;
  */
 public class TabMapper {
 
+    private static final boolean PARSE_TAB_SEMANTICALLY = false;
     private static int globalCounter = 0;
 
     public static TabMappedInput parseTab(TabRawInput tab) {
@@ -29,7 +30,7 @@ public class TabMapper {
         sectionNameToSection.put(tab.getTitle(), currentPart);
 
         for (String line : tabLines) {
-            if (line.isEmpty()) {
+            if (line.isEmpty() && PARSE_TAB_SEMANTICALLY) {
                 continue;
             }
             if (line.contains("Capo")) {
@@ -56,6 +57,12 @@ public class TabMapper {
                 sectionNameToSection.put(currentPartName, currentPart);
                 continue;
             }
+
+            if(!PARSE_TAB_SEMANTICALLY){
+                currentTabSegment.addRawTextLine(line);
+                continue;
+            }
+
             ChordSequence chordSequence = null;
             if (!isTabLine(line)) {
                 chordSequence = ChordSequence.buildChordSequence(line);
@@ -86,6 +93,8 @@ public class TabMapper {
         }
         fillInMissingParts(sectionNameToSection.values());
         removeEmpty(songSectionNames, sectionNameToSection);
+
+        globalCounter = 0;
 
         return new TabMappedInput()
                 .setArtist(tab.getArtist())
@@ -133,6 +142,5 @@ public class TabMapper {
     private static boolean isTabLine(String line) {
         return line.contains("--");
     }
-
 
 }

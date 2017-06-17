@@ -38,13 +38,23 @@ public class TabInputForm {
             return textField.getText();
         }
 
+        public TextInputControl getTextField(){
+            return textField;
+        }
+
+    }
+
+    public static InputField createTabInputField(){
+        InputField tab = new InputField("Tab:", TextArea::new);
+        tab.getTextField().setPrefHeight(400);
+        return tab;
     }
 
     public static Parent getInputForm(Consumer<TabRawInput> onSubmit) {
 
         InputField title = new InputField("Title:");
         InputField artist = new InputField("Artist:");
-        InputField tab = new InputField("Tab:", TextArea::new);
+        InputField tab = createTabInputField();
 
         FileChooser fileChooser = new FileChooser();
 

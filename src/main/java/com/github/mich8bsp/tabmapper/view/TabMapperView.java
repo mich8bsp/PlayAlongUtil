@@ -3,6 +3,7 @@ package com.github.mich8bsp.tabmapper.view;
 import com.github.mich8bsp.Utils;
 import com.github.mich8bsp.db.DBStoredTab;
 import com.github.mich8bsp.mediaplayer.MediaControl;
+import com.github.mich8bsp.tabmapper.input.TabInputForm;
 import com.github.mich8bsp.tabmapper.input.TabMappedInput;
 import com.github.mich8bsp.tabmapper.input.TabRawInput;
 import com.github.mich8bsp.tabmapper.parsing.TabMapper;
@@ -25,23 +26,57 @@ import java.util.stream.Collectors;
  */
 public class TabMapperView {
 
-    public static Parent getMapperView(TabRawInput input) {
-        TabMappedInput mappedInput = TabMapper.parseTab(input);
-        MediaControl mediaControl = MediaControl.buildMediaControl(Utils.getSongUrl(mappedInput.getAudioFile().getAbsolutePath()));
-        List<StatefulText<Duration>> songParts = createTaggableSongParts(mappedInput, mediaControl.getMediaPlayer());
+    private static boolean editModeEnabled = false;
+    private static TabInputForm.InputField editableTab = null;
+    private static List<StatefulText<Duration>> songParts = null;
+    private static DBStoredTab storedTab = null;
 
-        DBStoredTab storedTab = new DBStoredTab(mappedInput, songParts);
+    private static void mapInput(TabRawInput input, MediaPlayer mediaPlayer){
+        TabMappedInput mappedInput = TabMapper.parseTab(input);
+        songParts = createTaggableSongParts(mappedInput, mediaPlayer);
+        storedTab = new DBStoredTab(mappedInput, songParts);
+    }
+
+    public static Parent getMapperView(TabRawInput input) {
+        MediaControl mediaControl = MediaControl.buildMediaControl(Utils.getSongUrl(input.getAudioFile().getAbsolutePath()));
+        mapInput(input, mediaControl.getMediaPlayer());
 
         VBox box = new VBox(10);
+        Button editButton = new Button("Edit");
+        editButton.setOnAction(e -> {
+            editModeEnabled = !editModeEnabled;
+            editButton.setText(editModeEnabled ? "Finish editing" : "Edit");
+            box.getChildren().clear();
+            box.getChildren().add(mediaControl);
+            box.getChildren().add(editButton);
+            if(editModeEnabled){
+                TabInputForm.InputField tabInputField = TabInputForm.createTabInputField();
+                tabInputField.getTextField().setText(input.getTab());
+                editableTab = tabInputField;
+                box.getChildren().add(tabInputField);
+            }
+            if(!editModeEnabled) {
+                if(editableTab!=null){
+                    input.setTab(editableTab.getInputText());
+                    mapInput(input, mediaControl.getMediaPlayer());
+                    box.getChildren().addAll(songParts);
+                }
+                box.getChildren().add(getSubmitButton(storedTab));
+            }
+        });
         box.getChildren().add(mediaControl);
+        box.getChildren().add(editButton);
         box.getChildren().addAll(songParts);
+        box.getChildren().add(getSubmitButton(storedTab));
 
-        Button submitButton = new Button("Submit");
-        submitButton.setOnAction(e -> DBStore.storeToDB(storedTab));
-        box.getChildren().add(submitButton);
         return new ScrollPane(box);
     }
 
+    private static Button getSubmitButton(DBStoredTab storedTab){
+        Button submitButton = new Button("Submit");
+        submitButton.setOnAction(e -> DBStore.storeToDB(storedTab));
+        return submitButton;
+    }
 
     private static List<StatefulText<Duration>> createTaggableSongParts(TabMappedInput mappedInput, MediaPlayer mediaPlayer) {
         return mappedInput.getSongParts().stream()
